@@ -14,31 +14,35 @@ These two SNPs have been previously reported to be under positive section in Eur
 ```
 
 ## Get data
+The data for this session can be retrieved from the virtual campus (VC). 
+Go to de VC and download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
+Then, go back to the container terminal and type:
 
-folder ppg_bp_2019 with three main subfolders:
+```bash
+cd ppgdata
+tar -xvzf ppg_bp_2019.tar.gz
+```
+The folder ppg_bp_2019 with three main subfolders:
 
 * input_data: genotype and covariables input data and the script baypass_utils.R needed to run BayPass. 
 * results: results previously obtained for a matter of visualization.   
 * forR: previously obtained results that are necessary to plot some results obtained during this practical class and to execute some of the BayPass models (since we will not have enough time to run everything during the class).  
 The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
-The data for this session can be retrieved from the virtual campus (VC). 
-Go to de VC and download the file "dataBP.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
-Then, go back to the container terminal and type:
-
-```bash
-cd ppgdata
-tar -xvzf dataBP.tar.gz
-```
-The uncompressed folder contains the input subfoder with the input data files (e.g. genotype and covariable files) and the results subfolder with the results.
+Go to https://github.com/sguir/ppgcourse/blob/master/  
 
 Open two containers: one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
 In each container terminal and type:
 
 ```bash
-cd ppgdata/input
+cd ppgdata
+mkdir baypass
+cd ppgdata/ppg_bp_2019/input_data
+cp * /ppgdata/baypass/
 ```
+
+This will copy the input data and the baypass_utils.R into the folder baypass in which we are going to run baypass
 
 In the "R" container, upload the R libraries:
 
@@ -72,9 +76,17 @@ g_baypass -npop 52 -gfile hgdp.geno -seed 94875 -outprefix hgdp_s3
 On the screen, it will apear the specifications of the input file (number of markers, Genotype file name...) and the specifications of the MCMC.
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
 
 ```
+
+Copy the previously obtained results to the baypass folder:
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/CORE
+cp *  ppgdata/baypass/
+```
+
 
 Upload the estimate of omega (covariance matrix) for each seed:
 
@@ -213,9 +225,19 @@ g_baypass -npop 52 -gfile G.hgdp_pods_100000 -outprefix hgdp_pod_100000
 
 ```
 
-
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
+
+```
+
+Copy the previously obtained results to the baypass folder:
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/PODS/CORE/1000
+cp *  ppgdata/baypass/
+
+cd ppgdata/ppg_bp_2019/forR/PODS/CORE/100000
+cp *  ppgdata/baypass/
 
 ```
 
@@ -341,7 +363,15 @@ On the screen, it will apear the specifications of the input file (number of mar
 
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
+
+```
+
+Copy the previously obtained results to the baypass folder:
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/AUX/
+cp *  ppgdata/baypass/
 
 ```
 
@@ -402,7 +432,15 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -auxmodel -isingbeta 1.0 -
 ```
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
+
+```
+
+Copy the previously obtained results to the baypass folder:
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/AUX_LD/
+cp *  ppgdata/baypass/
 
 ```
 
@@ -480,7 +518,15 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -outprefix hgdpi
 ```
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
+
+```
+
+Copy the previously obtained results to the baypass folder:
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/STDis/
+cp *  ppgdata/baypass/
 
 ```
 
@@ -543,7 +589,13 @@ g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -o
 ```
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass.
+
+```
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/PODS/STDis/
+cp *  ppgdata/baypass/
 
 ```
 
@@ -710,7 +762,13 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates_eu -covmcmc -scalecov -ome
 ```
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass. 
+```
+
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/STDmcmc/
+cp *  ppgdata/baypass/
 
 ```
 
@@ -774,7 +832,13 @@ g_baypass -npop 52 -gfile G.hgdp_podsmceu_1000 -efile covariates_eu -scalecov -c
 ```
 
 ```diff
-- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+- Stop Baypass. 
+
+```
+
+```bash
+cd ppgdata/ppg_bp_2019/forR/PODS/STDmcmc/
+cp *  ppgdata/baypass/
 
 ```
 
