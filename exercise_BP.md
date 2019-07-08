@@ -84,7 +84,7 @@ Copy the previously obtained results to the baypass folder:
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/CORE
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 ```
 
 
@@ -234,10 +234,10 @@ Copy the previously obtained results to the baypass folder:
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/PODS/CORE/1000
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 cd ppgdata/ppg_bp_2019/forR/PODS/CORE/100000
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -371,7 +371,7 @@ Copy the previously obtained results to the baypass folder:
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/AUX/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -440,7 +440,7 @@ Copy the previously obtained results to the baypass folder:
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/AUX_LD/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -526,7 +526,7 @@ Copy the previously obtained results to the baypass folder:
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/STDis/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -595,7 +595,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -o
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/PODS/STDis/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -768,7 +768,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates_eu -covmcmc -scalecov -ome
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/STDmcmc/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
@@ -838,7 +838,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsmceu_1000 -efile covariates_eu -scalecov -c
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/PODS/STDmcmc/
-cp *  ppgdata/baypass/
+cp *  /ppgdata/baypass/
 
 ```
 
