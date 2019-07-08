@@ -61,6 +61,13 @@ g_baypass -npop 52 -gfile hgdp.geno -seed 26847 -outprefix hgdp_s2
 g_baypass -npop 52 -gfile hgdp.geno -seed 94875 -outprefix hgdp_s3
 ```
 
+On the screen, it will apear the specifications of the input file (number of markers, Genotype file name...) and the specifications of the MCMC.
+
+```diff
+- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+
+```
+
 Upload the estimate of omega (covariance matrix) for each seed:
 
 ```R
@@ -177,23 +184,30 @@ Read the omega matrix from seed1:
 omega_s1=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
 ```
 
-Run two simulation experiments with different number of replicates: 1000 and 100000 replicates
 
+Run **the first** (simu.hgdp_1000) of the two simulation experiments with different number of replicates: 1000 and 100000 replicates
 ```R
 simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
 
 simu.hgdp_100000 <- simulate.baypass(omega.mat=omega_s1, nsnp=100000, sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_100000")
 ```
 
-* Note that the G.hgdp_pods_1000 and G.hgdp_pods_100000 files are now the new genotype input files resulting from the simulation process
+* Note that the G.hgdp_pods_1000 and G.hgdp_pods_100000 files are now the new genotype input files resulting from the simulation process.  
+Run again the Core model **only with the first experiment** (G.hgdp_pods_1000) of the simulated PODs (in the BayPass container!)
 
 
-Run again the CORE model with the simulated PODs (in the BayPass container!)
 
 ```
 g_baypass -npop 52 -gfile G.hgdp_pods_1000 -outprefix hgdp_pod_1000 
 
 g_baypass -npop 52 -gfile G.hgdp_pods_100000 -outprefix hgdp_pod_100000
+
+```
+* We are not going to run the second one for a matter of time
+
+
+```diff
+- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
 
 ```
 
@@ -315,6 +329,14 @@ Run the AUX model (remember, in the BayPass container!):
 g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -auxmodel -omegafile hgdp_s1_mat_omega.out -outprefix hgdpaux
 ```
 
+On the screen, it will apear the specifications of the input file (number of markers, Genotype file name, Covariables file...) and the specifications of the MCMC.
+
+
+```diff
+- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+
+```
+
 Get the regression coefficients (posterior mean) for each SNP:
 ```R
 covaux.snp.res=read.table("hgdpaux_summary_betai.out",h=T)
@@ -370,6 +392,11 @@ Run Baypass with the Aux model (in the BayPass container!):
 g_baypass -npop 52 -gfile hgdp.geno -efile covariates -auxmodel -isingbeta 1.0 -omegafile hgdp_s1_mat_omega.out -outprefix hgdpauxld
 ```
 
+```diff
+- Stop Baypass. Go to the folder X in Y and drag all the files in foder Z to the ppgdata/input folder
+
+```
+
 Plot the estimates of the posterior mean of the each auxiliary variable delta_ik under both models (Aux and Aux with LD):
 
 ```R
@@ -410,6 +437,8 @@ write.table(de.bf, file="aux_ld_model_decisive_evidence_SNPs.txt", col.names=T, 
 ```
 
 ```QUESTION: Which are the SNPs that are significantly associated? is the number of significant SNPs more or less the same as that under the AUX model?```
+
+# EXTRA EXERCISES
 
 ## The STANDARD Model: importance sampling 
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
@@ -494,7 +523,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -o
 
 * Note that for running the STDis a file with all the covariables is normally used whereas to run the simulations under the STDis each variable should be included at time (Number of runs of simulations = Number of covariables). 
 
-### XtX, BFis and eBFis calibration  
+### XtX, BFis and eBPis calibration  
 
 Get the pod XtX (1000 pods):
 
@@ -559,19 +588,19 @@ Compute the 1% threshold for BFis and eBPis and for each covariable:
 
 ```R
 
-podis.ebf.lat=read.table("pod_hgdpvislat_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebf.lat=quantile(podis.ebf.lat$eBPis, probs=0.99)
-bfis.lat=podis.ebf.lat$BF.dB
+podis.ebp.lat=read.table("pod_hgdpvislat_1000_summary_betai_reg.out",h=T)
+podis.thresh.ebp.lat=quantile(podis.ebp.lat$eBPis, probs=0.99)
+bfis.lat=podis.ebp.lat$BF.dB
 bfis.thresh.lat=quantile(bfis.lat, probs=0.99)
 
-podis.ebf.lon=read.table("pod_hgdpvislon_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebf.lon=quantile(podis.ebf.lon$eBPis, probs=0.99)
-bfis.lon=podis.ebf.lon$BF.dB
+podis.ebp.lon=read.table("pod_hgdpvislon_1000_summary_betai_reg.out",h=T)
+podis.thresh.ebp.lon=quantile(podis.ebp.lon$eBPis, probs=0.99)
+bfis.lon=podis.ebp.lon$BF.dB
 bfis.thresh.lon=quantile(bfis.lon, probs=0.99)
 
-podis.ebf.eu=read.table("pod_hgdpviseu_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebf.eu=quantile(podis.ebf.eu$eBPis, probs=0.99)
-bfis.eu=podis.ebf.eu$BF.dB.
+podis.ebp.eu=read.table("pod_hgdpviseu_1000_summary_betai_reg.out",h=T)
+podis.thresh.ebp.eu=quantile(podis.ebp.eu$eBPis, probs=0.99)
+bfis.eu=podis.ebp.eu$BF.dB.
 bfis.thresh.eu=quantile(bfis.eu, probs=0.99)
 ```
 
@@ -583,7 +612,7 @@ layout(matrix(1:3,3,1))
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
 abline(h=bfis.thresh.lat, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h=podis.thresh.ebf.lat, lty=2, col="red")
+abline(h=podis.thresh.ebp.lat, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
 dev.off()
 
@@ -592,7 +621,7 @@ layout(matrix(1:3,3,1))
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 2, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
 abline(h=bfis.thresh.lon, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 2, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h= podis.thresh.ebf.lon, lty=2, col="red")
+abline(h= podis.thresh.ebp.lon, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 2 ,]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
 dev.off()
 
@@ -601,31 +630,31 @@ layout(matrix(1:3,3,1))
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 3, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
 abline(h=bfis.thresh.eu, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 3, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h= podis.thresh.ebf.eu, lty=2, col="red")
+abline(h= podis.thresh.ebp.eu, lty=2, col="red")
 plot(covis.snp.res[covis.snp.res$COVARIABLE == 3 ,]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
 dev.off()
 ```
 
-Retrieve the SNPs with significant association (BFis, eBF) for each covariable:
+Retrieve the SNPs with significant association (BFis, eBP) for each covariable:
 
 ```R
 bf.is.lat <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lat, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lat, ]$COVARIABLE == 1, ]
-ebf.is.lat <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.lat, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.lat, ]$COVARIABLE == 1, ]
+ebp.is.lat <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lat, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lat, ]$COVARIABLE == 1, ]
 
 bf.is.lon <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lon, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lon, ]$COVARIABLE == 2, ]
-ebf.is.lon <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.lon, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.lon, ]$COVARIABLE == 2, ]
+ebp.is.lon <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lon, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lon, ]$COVARIABLE == 2, ]
 
 bf.is.eu <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.eu, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.eu, ]$COVARIABLE == 3, ]
-ebf.is.eu <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.eu, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebf.eu, ]$COVARIABLE == 3, ]
+ebp.is.eu <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.eu, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.eu, ]$COVARIABLE == 3, ]
 
 write.table(bf.is.lat, file="std.is_signif_BFis_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebf.is.lat, file="std.is_signif_eBF_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(ebp.is.lat, file="std.is_signif_eBP_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
 
 write.table(bf.is.lon, file="std.is_signif_BFis_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebf.is.lon, file="std.is_signif_eBF_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(ebp.is.lon, file="std.is_signif_eBP_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
 
 write.table(bf.is.eu, file="std.is_signif_BFis_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebf.is.eu, file="std.is_signif_eBF_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(ebp.is.eu, file="std.is_signif_eBP_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
 ```
 ## The STANDARD Model: mcmc
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
@@ -724,14 +753,14 @@ covmcmc.snp.res.eu=read.table("hgdp_mcmc_eu_summary_betai.out",h=T)
 Compute the 1% threshold for Bayes Factor mcmcm (BFmcmc) for each covariable:
 
 ```R
-podmc.ebf.lat=read.table("pod_hgdp_mcmc_lat_summary_betai.out",h=T)
-podmc.thresh.ebf.lat=quantile(podmc.ebf.lat$eBPmc, probs=0.99)
+podmc.ebp.lat=read.table("pod_hgdp_mcmc_lat_summary_betai.out",h=T)
+podmc.thresh.ebp.lat=quantile(podmc.ebp.lat$eBPmc, probs=0.99)
 
-podmc.ebf.lon=read.table("pod_hgdp_mcmc_lon_summary_betai.out",h=T)
-podmc.thresh.ebf.lon=quantile(podmc.ebf.lon$eBPmc, probs=0.99)
+podmc.ebp.lon=read.table("pod_hgdp_mcmc_lon_summary_betai.out",h=T)
+podmc.thresh.ebp.lon=quantile(podmc.ebp.lon$eBPmc, probs=0.99)
 
-podmc.ebf.eu=read.table("pod_hgdp_mcmc_eu_summary_betai.out",h=T)
-podmc.thresh.ebf.eu=quantile(podmc.ebf.eu$eBPmc, probs=0.99)
+podmc.ebp.eu=read.table("pod_hgdp_mcmc_eu_summary_betai.out",h=T)
+podmc.thresh.ebp.eu=quantile(podmc.ebp.eu$eBPmc, probs=0.99)
 ```
 
 Plot the resulting estimates of the empirical Bayesian P-values, the underlying regression coefficients (posterior mean) and the calibrated XtX obtained under the CORE model for each covariable:
@@ -740,7 +769,7 @@ Plot the resulting estimates of the empirical Bayesian P-values, the underlying 
 pdf(file="plot_std_mcmc_model_results_lat.pdf")
 layout(matrix(1:3,3,1))
 plot(covmcmc.snp.res.lat$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebf.lat, lty=2, col="red")
+abline(h=podmc.thresh.ebp.lat, lty=2, col="red")
 plot(covmcmc.snp.res.lat$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
 plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
 abline(h=pod.thresh, lty=2, col="red")
@@ -749,7 +778,7 @@ dev.off()
 pdf(file="plot_std_mcmc_model_results_lon.pdf")
 layout(matrix(1:3,3,1))
 plot(covmcmc.snp.res.lon$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebf.lon, lty=2, col="red")
+abline(h=podmc.thresh.ebp.lon, lty=2, col="red")
 plot(covmcmc.snp.res.lon$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
 plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
 abline(h=pod.thresh, lty=2, col="red")
@@ -758,27 +787,30 @@ dev.off()
 pdf(file="plot_std_mcmc_model_results_eu.pdf")
 layout(matrix(1:3,3,1))
 plot(covmcmc.snp.res.eu$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebf.eu, lty=2, col="red")
+abline(h=podmc.thresh.ebp.eu, lty=2, col="red")
 plot(covmcmc.snp.res.eu$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
 plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
 abline(h=pod.thresh, lty=2, col="red")
 dev.off()
 ```
 
-Retrieve the SNPs with significant association (eBFmc)
+Retrieve the SNPs with significant association (eBPmc)
 
 ```R
-bf.mc.lat <- covmcmc.snp.res.lat[covmcmc.snp.res.lat$eBPmc > podmc.thresh.ebf.lat, ]
-bf.mc.lon <- covmcmc.snp.res.lon[covmcmc.snp.res.lon$eBPmc > podmc.thresh.ebf.lon, ]
-bf.mc.eu <- covmcmc.snp.res.eu[covmcmc.snp.res.eu$eBPmc > podmc.thresh.ebf.eu, ]
+bf.mc.lat <- covmcmc.snp.res.lat[covmcmc.snp.res.lat$eBPmc > podmc.thresh.ebp.lat, ]
+bf.mc.lon <- covmcmc.snp.res.lon[covmcmc.snp.res.lon$eBPmc > podmc.thresh.ebp.lon, ]
+bf.mc.eu <- covmcmc.snp.res.eu[covmcmc.snp.res.eu$eBPmc > podmc.thresh.ebp.eu, ]
 
-write.table(bf.mc.lat, file="std.mcmc_signif_eBFmc_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(bf.mc.lon, file="std.mcmc_signif_eBFmc_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(bf.mc.eu, file="std.mcmc_signif_eBFmc_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(bf.mc.lat, file="std.mcmc_signif_eBPmc_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(bf.mc.lon, file="std.mcmc_signif_eBPmc_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
+write.table(bf.mc.eu, file="std.mcmc_signif_eBPmc_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
 ```
+### BIBLIOGRAPHY
 
-
-
+* Gautier M. 2015. Genome-Wide Scan for Adaptive Divergence and Association with Population-Specific Covariates. Genetics 201(4): 1555–1579. 
+* Günther T and Coop G. 2013. Robust Identification of Local Adaptation from Allele Frequencies. Genetics 195(1): 205–220.
+* Coop G. Witonsky D, Di Rienzo A, Pritchard JK. 2010. Using environmental correlations to identify loci underlying local adaptation. Genetics 185: 1411–1423.
+* Hoban S, Kelley JL, Lotterhos KE, Antolin MF, Bradburd G, Lowry DB, Poss ML, Reed LK, Storfer A, Whitlock MC. 2016. Finding the Genomic Basis of Local Adaptation: Pitfalls, Practical Solutions, and Future Directions. Am Nat. 188(4): 379–397
 
 
 
