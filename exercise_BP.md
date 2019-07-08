@@ -14,6 +14,14 @@ These two SNPs have been previously reported to be under positive section in Eur
 ```
 
 ## Get data
+
+folder ppg_bp_2019 with three main subfolders:
+
+* input_data: genotype and covariables input data and the script baypass_utils.R needed to run BayPass. 
+* results: results previously obtained for a matter of visualization.   
+* forR: previously obtained results that are necessary to plot some results obtained during this practical class and to execute some of the BayPass models (since we will not have enough time to run everything during the class).  
+The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
+
 The data for this session can be retrieved from the virtual campus (VC). 
 Go to de VC and download the file "dataBP.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
 Then, go back to the container terminal and type:
@@ -839,3 +847,6 @@ write.table(bf.mc.eu, file="std.mcmc_signif_eBPmc_eu_SNPs.txt", col.names=T, row
 * Günther T and Coop G. 2013. Robust Identification of Local Adaptation from Allele Frequencies. Genetics 195(1): 205–220.
 * Coop G. Witonsky D, Di Rienzo A, Pritchard JK. 2010. Using environmental correlations to identify loci underlying local adaptation. Genetics 185: 1411–1423.
 * Hoban S, Kelley JL, Lotterhos KE, Antolin MF, Bradburd G, Lowry DB, Poss ML, Reed LK, Storfer A, Whitlock MC. 2016. Finding the Genomic Basis of Local Adaptation: Pitfalls, Practical Solutions, and Future Directions. Am Nat. 188(4): 379–397
+
+
+
