@@ -76,7 +76,7 @@ g_baypass -npop 52 -gfile hgdp.geno -seed 94875 -outprefix hgdp_s3
 On the screen, it will apear the specifications of the input file (number of markers, Genotype file name...) and the specifications of the MCMC.
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -226,7 +226,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_100000 -outprefix hgdp_pod_100000
 ```
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -363,7 +363,7 @@ On the screen, it will apear the specifications of the input file (number of mar
 
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -432,7 +432,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -auxmodel -isingbeta 1.0 -
 ```
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -518,7 +518,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -outprefix hgdpi
 ```
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -589,7 +589,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -o
 ```
 
 ```diff
-- Stop Baypass.
+- Stop BayPass.
 
 ```
 
@@ -762,7 +762,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates_eu -covmcmc -scalecov -ome
 ```
 
 ```diff
-- Stop Baypass. 
+- Stop BayPass. 
 ```
 
 
@@ -832,7 +832,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsmceu_1000 -efile covariates_eu -scalecov -c
 ```
 
 ```diff
-- Stop Baypass. 
+- Stop BayPass. 
 
 ```
 
