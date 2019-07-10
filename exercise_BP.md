@@ -5,11 +5,11 @@ In this practical class we will try to identify human SNPs with evidences of loc
 
 * We will use a modified version of the data used in Coop et al. (2010). It consists of genotypes at 2333 + 2 SNPs for 927 individuals from 52 human populations of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
 These two SNPs have been previously reported to be under positive selection in European populations and are located in genes (ERC2 and TYR) involved in light skin and eye color (Wilde et al.2014).
-* The geographical variables explored are latitude, longitude and a categorical variable with value = 1 if the population is European and -1 if is not.
+* The covariates (geographical variables) explored are latitude, longitude and a categorical variable with value = 1 if the population is European and -1 if is not.
  
 
 ```diff
-- Note that even we are performing the analysis with a very reduce dataset, the time it takes to run each model is above what we have in this practice and therefore we will stop BayPass and use some of the results obtained previously to plot them in R and to run the next model.
+- Note that even we are performing the analysis with a very reduce dataset, the time it takes to run each model is above what we have in this practice and therefore we will stop BayPass and use some of the results previously obtained to plot them in R and to run the next models.
 
 ```
 
@@ -22,13 +22,14 @@ Then, go back to the container terminal and type:
 cd ppgdata
 tar -xvzf ppg_bp_2019.tar.gz
 ```
-The folder ppg_bp_2019 with three main subfolders:
+The folder ppg_bp_2019 has three main subfolders:
 
-* input_data: genotype and covariables input data and the script baypass_utils.R needed to run BayPass. 
-* results: results previously obtained for a matter of visualization.   
+* input_data: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
+* results: previously obtained results for a matter of visualization.   
 * forR: previously obtained results that are necessary to plot some results obtained during this practical class and to execute some of the BayPass models (since we will not have enough time to run everything during the class).  
-The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
+
+The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
 Open two containers: one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
