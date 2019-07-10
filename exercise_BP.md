@@ -14,8 +14,8 @@ These two SNPs have been previously reported to be under positive selection in E
 ```
 
 ## Get data
-The data for this session can be retrieved from googel drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view) 
-Go to de VC and download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
+The data for this session can be retrieved from google drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view)   
+Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
 Then, go back to the container terminal and type:
 
 ```bash
