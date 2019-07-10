@@ -31,7 +31,7 @@ The folder ppg_bp_2019 has three main subfolders:
 
 The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
-Open two containers: one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
+Open another container: the one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
 Type in the "BayPass" container terminal:
 
