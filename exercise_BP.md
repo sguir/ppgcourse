@@ -31,7 +31,7 @@ The folder ppg_bp_2019 has three main subfolders:
 
 The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
-Open another container: the one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
+Open another container: the one (on your left) will be used to run Baypass ("BayPass container") and the other (on your right) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
 Type in the "BayPass" container terminal:
 
@@ -45,7 +45,13 @@ cp * /ppgdata/baypass/
 
 This will copy the input data and the baypass_utils.R script into the folder baypass in which we are going to run baypass
 
-In the "R" container, upload the R libraries:
+In the "R" container:
+
+```bash
+cd ppgdata
+``
+
+Start a new R session and upload the R libraries:
 
 ```R
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
@@ -55,11 +61,11 @@ Now we are ready to run BayPass:
 
 ## The CORE Model
 The core model allows to perform genome scan for differentiation (covariate free) using the XtX statistics (\~Fst).
-The main advantage of this approach is that it explicitly account for the covariance structure in population allele frequencies (via estimating) resulting from the demographic history of the populations.
+The main advantage of this approach is that explicitly accounts for the covariance structure in population allele frequencies (via estimating) resulting from the demographic history of the populations.
 
-To run this model with allele data you will need:
+To run this model (using allele data) you will need:
 * The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
 * A random number for the seed (in case of needed; ```-seed flag```)
 * A prefix to name the output (```-outprefix flag```)
 
@@ -108,9 +114,9 @@ dimnames(omega_s2)=list(pop.names,pop.names)
 dimnames(omega_s3)=list(pop.names,pop.names)
 ```
 
-We can explore the shared history of populations by transforming the covariance matrix into a correlation matrix or a bifurcating phylogenetic tree:
+We can explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix or a bifurcating phylogenetic tree:
 
-Transform the covariance matrix into a correlation matrix using the R function cov2cor():
+Transform the omega covariance matrix into a correlation matrix using the R function cov2cor():
 
 ```R
 cor.mat_s1=cov2cor(omega_s1)
@@ -118,7 +124,7 @@ cor.mat_s2=cov2cor(omega_s2)
 cor.mat_s3=cov2cor(omega_s3)
 ```
 
-Plot the correlation matrix (here only for seed1):
+Plot the omega correlation matrix (here only for seed1):
 
 ```R
 pdf(file="correlation_matrix_core_model.pdf")
@@ -207,7 +213,7 @@ omega_s1=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
 ```
 
 
-Run **only the first** (simu.hgdp_1000) of the two simulation experiments with different number of replicates (experiment1=1000 and experiment2=100000 replicates)  
+Run **only the first** (simu.hgdp_1000) of the two simulation experiments with different number of replicates (experiment_1=1000 and experiment_2=100000 replicates)  
 * We are not going to run the second one for a matter of time
 ```R
 simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
