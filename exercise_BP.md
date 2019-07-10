@@ -250,12 +250,12 @@ cp *  /ppgdata/baypass/
 ```
 
 ### Sanity Check 
-Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posteriors for the covariance matrix and the other hyperparameters) are giving us \"valid\" predictions about the \"reality\".
-In other words, if the model we have inferred is able to generate data similar to the observed ones.
+Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
+In other words, if the model we have inferred is able to generate data similar to those observed.
 
 
 #### 1000 PODS
-Get the omega estimated from the POD analysis:
+Get the omega estimated from the PODs:
 ```R
 pod.omega_1000=as.matrix(read.table("hgdp_pod_1000_mat_omega.out"))
 ```
@@ -285,7 +285,7 @@ dev.off()
 ```
 
 #### 100000 PODS
-Get the omega estimated from the POD analysis:
+Get the omega estimated from the PODs:
 ```R
 pod.omega_100000=as.matrix(read.table("hgdp_pod_100000_mat_omega.out"))
 ```
@@ -335,13 +335,15 @@ abline(h=pod.thresh, lty=2, col="red")
 dev.off()
 ```
 
-Retrive the SNPs that are significant (XtX): 
+Retrieve the SNPs that are significant (XtX): 
 ```R
 snps.sign.xtx <- hgdp_s1.snp.res[hgdp_s1.snp.res$M_XtX >= pod.thresh, ]
 write.table(snps.sign.xtx, file="significant_SNPs_XtX.txt", col.names=T, row.names=F, quote=F, sep="\t")
 ```
-```QUESTION: Which are the SNPs that are significant?```  
-Here [map file]() you can find a "map" file associated to you original geno file with the name of each SNP (chromosome and position can be found in NCBI database)
+
+```QUESTION: Which are the SNPs that are significant?```   
+ 
+The file rs_ids_2335.txt in the folder input_data is a "map" file associated to you original geno file with the name of each SNP (chromosome and position can be found in NCBI database)
 
 ## The AUX Model
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
@@ -352,10 +354,10 @@ We can compare both models (association and no-association) through Bayes Factor
 It is (strongly) recommended to scale each covariate (so that the mean = 0 and the std = 1 for each covariable). 
 The scalecov option allows to perform this step automatically prior to analysis, if needed.
 
-To run this model with allele data you will need:
+To run this model (with allele data) you will need:
 * The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```).
-* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
 * To specify if you want to scale covariables (```-scalecov flag```)
 * To specify the model you want to run (```-auxmodel flag```)
 * To provide the omega matrix obtained under the CORE model (```-omegafile flag```)
@@ -403,7 +405,7 @@ abline(h=pod.thresh, lty=2, col="red")
 dev.off()
 ```
 * Blue, green and red lines in the BF plot are depicting the thresholds for the SNPs with strong, very strong and decisive evidence of association, respectively.
-* Note that the calibrated XtX values were obtained from the CORE model and the PODs.
+* Note that the calibrated XtX values were obtained from the CORE model using PODs.
 * Note also that the X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
 
 Retrieve the SNPs with strong (se), very strong (vse) and decisive evidence (de) of significant association:
@@ -419,15 +421,15 @@ write.table(de.bf, file="aux_model_decisive_evidence_SNPs.txt", col.names=T, row
 ```QUESTION: Which are the significant SNPs and to which covariable they are associated? Are some of the significant SNPs associated to more than one covariable?```  
 
 ## The AUX Model with Linkage Disequilibrium (LD)
-This model is similar to the AUX model but in case you know the physical order of the SNPs in chromosomes it allows to account for
+This model is similar to the AUX model but in case you know the physical order of the SNPs on chromosomes it allows to account for
 spatial dependency among markers (\~linkage disequilibrium) by means of the parameter b_is.
 b_is = 0 implies no spatial dependency and b_is > 0 assumes that the delta_ik with similar values tend to cluster according to the underlying SNP positions (the higher the b_is, the higher the level of
 spatial homogeneity). In practice, b_is = 1 is commonly used and a value of b_is =< 1 is recommended.
 
-To run this model with allele data you will need:
+To run this model (with allele data) you will need:
 * The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```).
-* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
 * To set the value of the  b_is parameter (```-isingbeta flag```)
 * To specify if you want to scale covariables (```-scalecov flag```)
 * To specify the model you want to run (```-auxmodel flag```)
@@ -466,7 +468,7 @@ plot(covaux.snp.res$M_Delta,xlab="SNP",ylab=expression(delta[i]),main="AUX model
 plot(covauxisb1.snp.res$M_Delta,xlab="SNP",ylab=expression(delta[i]), main="AUX model with isb=1")
 dev.off()
 ```
-* Note also that the X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
+* Again, the X axis in the two plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
 
 Plot the resulting estimates of the Bayes Factor, the underlying regression coefficients (posterior mean) and the calibrated XtX:
 
@@ -484,10 +486,11 @@ dev.off()
 ```
 
 * Again, blue, green and red lines in the BF plot are depicting the thresholds for the SNPs with strong, very strong and decisive evidence of association, respectively.
-* Note that the calibrated XtX values were obtained from the CORE model and the PODs.
-* Note also that the X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
+* Note that the calibrated XtX values were obtained from the CORE model using PODs.
+* The X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
 
 Retrieve the SNPs with strong (se), very strong (vse) and decisive evidence (de) of significant association:
+
 ```R
 se.bf <- covauxisb1.snp.res[covauxisb1.snp.res$BF.dB. > 10 & covauxisb1.snp.res$BF.dB. < 15, ]
 vse.bf <- covauxisb1.snp.res[covauxisb1.snp.res$BF.dB. > 15 & covauxisb1.snp.res$BF.dB. < 20, ]
@@ -508,14 +511,14 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 * Remember that this model is recommended when the number of populations is small (e.g.,  8) and/or when populations are highly differentiated.
 * The importance sampling algorithm relies on approximations to estimate the regression coefficients (do not sample them from the posterior distribution and hence, the model should be run 3-5 times with different seeds to check consistency across runs). 
-* The median of beta among the runs can be taken as the estimate beta parameter.
+* The median of the parameter of insterest (e.g., beta) among runs can be taken as the estimate (beta) of the parameter.
 * Bayes factor importance sampling (BFis) and the approximated Bayesian P-value (eBPis) are used to evaluate if a particular SNP is associated with a particular covariable and as the XtX statistic in the CORE model, they should be calibrated. 
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
-To run this model with allele data you will need:
+To run this model (with allele data) you will need:
 * The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```).
-* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
 * To specify if you want to scale covariables (```-scalecov flag```)
 * A prefix to name the output (```-outprefix flag```)
 
@@ -540,7 +543,7 @@ cp *  /ppgdata/baypass/
 
 ### Pseudo Observed Data (PODs) 
 Here and for a matter of time, we are going to simulate 1,000 PODs (but usually 100000 is recommended). 
-To simulate PODS under the STDis we need to follow the same procedure as with XtX in the CORE model but adding to extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter for EACH covariable (output resulting from running the STDis model). 
+To simulate PODs under the STDis model we need t follow the same procedure as with XtX in the CORE model but adding two extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter of EACH covariable (output resulting from running the STDis model). 
 
 Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution for each covariable separately: 
 
@@ -577,7 +580,7 @@ cov2=as.numeric(cov[2,])
 cov3=as.numeric(cov[3,])
 ```
 
-Create the PODs for each covariable separately:
+Generate PODs for each covariable separately:
 ```R
 simu.hgdpislat_1000 <- simulate.baypass(omega.mat=omega.is, nsnp=1000, beta.coef=beta.coefislat, beta.pi=pi.beta.coefis, pop.trait=cov1, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsislat_1000")
 
@@ -607,11 +610,11 @@ cp *  /ppgdata/baypass/
 
 ```
 
-* Note that for running the STDis a file with all the covariables is normally used whereas to run the simulations under the STDis each variable should be included at time (Number of runs of simulations = Number of covariables). 
+* Note that for running the STDis, a file with all the covariables is normally used whereas to run the simulations under the STDis each covariable should be included at time (Number of runs of simulations = Number of covariables). 
 
 ### XtX, BFis and eBPis calibration  
 
-Get the pod XtX (1000 pods):
+Get the XtX statistic from PODs (1000 PODs):
 
 ```R
 podis.xtx.lat=read.table("pod_hgdpvislat_1000_summary_pi_xtx.out", h=T)$M_XtX
@@ -651,7 +654,7 @@ abline(h=podis.thresh.eu, lty=2, col="red")
 dev.off()
 ```
 
-Retrive the SNPs that are significant (XtX statsitic):
+Retrieve the SNPs that are significant (XtX statsitic):
 
 ```R
 snps.sign.xtx.is.lat <- hgdp.is.snp.res.lat[hgdp.is.snp.res.lat$M_XtX >= podis.thresh.lat, ]
@@ -748,7 +751,7 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 * In this case, the user should provide the omega matrix (e.g., using posterior estimates obtained from the CORE model) and it is recommended to
 consider only one covariable at a time (particularly if some covariables are correlated).
-* Bayes factor mcmc (eBPmcmc) is used to evaluate if a particular SNP is associated with a particular covariable. And as the XtX statistic in the CORE model, they should be calibrated. 
+* Bayes factor mcmc (eBPmcmc) is used to evaluate if a particular SNP is associated with a particular covariable, and as the XtX statistic in the CORE model, they should be calibrated. 
 
 To run this model with allele data you will need:
 * The number of populations in the analysis (```-npop flag```)
@@ -782,7 +785,7 @@ cp *  /ppgdata/baypass/
 
 ### Pseudo Observed Data (PODs) 
 Again, for a matter of time, we are going to simulate 1,000 PODs (but usually 100000 is recommended). 
-To simulate PODS under the STDmcmc we need to follow the same procedure as with XtX in the CORE model but adding to extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter for EACH covariable (output resulting from running the STDmcmc model). 
+To simulate PODS under the STDmcmc we need to follow the same procedure as with XtX in the CORE model but adding two extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter for EACH covariable (output resulting from running the STDmcmc model). 
 
 
 Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
@@ -814,10 +817,13 @@ beta.coefmc.eu=read.table("hgdp_mcmc_eu_summary_betai.out",h=T)$M_Beta
 ```
 
 Get the values for each covariable separately:
+
+```R
 cov=read.table("covariates",h=F)
 cov1=as.numeric(cov[1,])
 cov2=as.numeric(cov[2,])
 cov3=as.numeric(cov[3,])
+```
 
 Create the PODs for each covariable separately:
 
