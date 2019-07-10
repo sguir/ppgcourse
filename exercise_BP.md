@@ -14,7 +14,7 @@ These two SNPs have been previously reported to be under positive selection in E
 ```
 
 ## Get data
-The data for this session can be retrieved from the virtual campus (VC). 
+The data for this session can be retrieved from googel drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view) 
 Go to de VC and download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
 Then, go back to the container terminal and type:
 
@@ -33,16 +33,17 @@ The files in each subfolder are classified according to the model/process (e.g.,
 
 Open two containers: one (on your right) will be used to run Baypass ("BayPass container") and the other (on your left) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
-In each container terminal and type:
+Type in the "BayPass" container terminal:
 
 ```bash
 cd ppgdata
 mkdir baypass
+
 cd ppgdata/ppg_bp_2019/input_data
 cp * /ppgdata/baypass/
 ```
 
-This will copy the input data and the baypass_utils.R into the folder baypass in which we are going to run baypass
+This will copy the input data and the baypass_utils.R script into the folder baypass in which we are going to run baypass
 
 In the "R" container, upload the R libraries:
 
@@ -50,6 +51,7 @@ In the "R" container, upload the R libraries:
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("baypass_utils.R")
 ```
+Now we are ready to run BayPass:
 
 ## The CORE Model
 The core model allows to perform genome scan for differentiation (covariate free) using the XtX statistics (\~Fst).
