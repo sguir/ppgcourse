@@ -14,8 +14,10 @@ These two SNPs have been previously reported to be under positive selection in E
 ```
 
 ## Get data
-The data for this session can be retrieved from google drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view)   
-Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata). 
+The data for this session can be retrieved from google drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view)  
+   
+Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata).  
+
 Then, go back to the container terminal and type:
 
 ```bash
@@ -57,6 +59,7 @@ Start a new R session and upload the R libraries:
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("baypass_utils.R")
 ```
+
 Now we are ready to run BayPass:
 
 ## The CORE Model
@@ -94,7 +97,6 @@ Copy the previously obtained results to the baypass folder:
 cd ppgdata/ppg_bp_2019/forR/CORE
 cp *  /ppgdata/baypass/
 ```
-
 
 Upload the estimate of omega (covariance matrix) for each seed:
 
@@ -148,6 +150,7 @@ plot(bta14.tree_s1, type="p",
 main=expression("Seed1: Hier. clust. tree based on"~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"), cex=0.5)
 dev.off()
 ```
+
 * We can compare the omega matrices obtained under the CORE model when using different seeds.   
 * Remember that we run the CORE model with different seeds to check consistency in the estimation of parameters of the model.
 
@@ -167,7 +170,6 @@ dist.23=fmd.dist(omega_s2, omega_s3)
 ```
 
 If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses.
-
 
 Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
 
@@ -192,7 +194,6 @@ PODs are simulated under the inference model (e.g., using posterior estimates of
 overall (across population) SNP allele frequencies).
 Once these PODS are simulated, we need to run again the CORE model to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (calibration process)
 
-
 Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
 
 ```R
@@ -212,7 +213,6 @@ Read the omega matrix from seed1:
 omega_s1=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
 ```
 
-
 Run **only the first** (simu.hgdp_1000) of the two simulation experiments with different number of replicates (experiment_1=1000 and experiment_2=100000 replicates)  
 * We are not going to run the second one for a matter of time
 ```R
@@ -222,7 +222,6 @@ simu.hgdp_100000 <- simulate.baypass(omega.mat=omega_s1, nsnp=100000, sample.siz
 ```
 
 * Note that the G.hgdp_pods_1000 and G.hgdp_pods_100000 files are now the new genotype input files resulting from the simulation process.  
-
 
 Run again the Core model **only with the first simulation experiment** (G.hgdp_pods_1000) (remember, in the BayPass container!)
 
@@ -252,7 +251,6 @@ cp *  /ppgdata/baypass/
 ### Sanity Check 
 Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed.
-
 
 #### 1000 PODS
 Get the omega estimated from the PODs:
@@ -370,7 +368,6 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -auxmodel -omega
 ```
 
 On the screen, it will apear the specifications of the input file (number of markers, Genotype file name, Covariables file...) and the specifications of the MCMC.
-
 
 ```diff
 - Stop BayPass.
@@ -786,7 +783,6 @@ cp *  /ppgdata/baypass/
 ### Pseudo Observed Data (PODs) 
 Again, for a matter of time, we are going to simulate 1,000 PODs (but usually 100000 is recommended). 
 To simulate PODS under the STDmcmc we need to follow the same procedure as with XtX in the CORE model but adding two extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter for EACH covariable (output resulting from running the STDmcmc model). 
-
 
 Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
 
