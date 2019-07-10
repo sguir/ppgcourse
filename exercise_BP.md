@@ -33,7 +33,7 @@ The folder ppg_bp_2019 has three main subfolders:
 
 The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
 
-Open another container: the one (on your left) will be used to run Baypass ("BayPass container") and the other (on your right) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
+Open another terminal window of the same container running the script newshelloncontainer in a new terminal of the host OS: the one (on your left) will be used to run Baypass ("BayPass container") and the other (on your right) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
 
 Type in the "BayPass" container terminal:
 
@@ -67,12 +67,12 @@ The core model allows to perform genome scan for differentiation (covariate free
 The main advantage of this approach is that explicitly accounts for the covariance structure in population allele frequencies (via estimating) resulting from the demographic history of the populations.
 
 To run this model (using allele data) you will need:
-* The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
-* A random number for the seed (in case of needed; ```-seed flag```)
-* A prefix to name the output (```-outprefix flag```)
+* The number of populations in the analysis (```-npop```)
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
+* A random number for the seed (in case of needed; ```-seed```)
+* A prefix to name the output (```-outprefix```)
 
-** For running the models with Pool-seq data see the specifications in the manual [BayPass manual](http://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.1.pdf)
+** For running the models with Pool-seq data see the specifications in the [BayPass manual](http://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.1.pdf)
 
 Run BayPass under the CORE model with three different seeds:
 
@@ -87,7 +87,7 @@ g_baypass -npop 52 -gfile hgdp.geno -seed 94875 -outprefix hgdp_s3
 On the screen, it will apear the specifications of the input file (number of markers, Genotype file name...) and the specifications of the MCMC.
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -233,7 +233,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_100000 -outprefix hgdp_pod_100000
 ```
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -353,13 +353,13 @@ It is (strongly) recommended to scale each covariate (so that the mean = 0 and t
 The scalecov option allows to perform this step automatically prior to analysis, if needed.
 
 To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
-* To specify if you want to scale covariables (```-scalecov flag```)
-* To specify the model you want to run (```-auxmodel flag```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile flag```)
-* A prefix to name the output (```-outprefix flag```)
+* The number of populations in the analysis (```-npop```)
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* To specify if you want to scale covariables (```-scalecov```)
+* To specify the model you want to run (```-auxmodel```)
+* To provide the omega matrix obtained under the CORE model (```-omegafile```)
+* A prefix to name the output (```-outprefix```)
 
 Run the AUX model (remember, in the BayPass container!):
 
@@ -370,7 +370,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -auxmodel -omega
 On the screen, it will apear the specifications of the input file (number of markers, Genotype file name, Covariables file...) and the specifications of the MCMC.
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -424,14 +424,14 @@ b_is = 0 implies no spatial dependency and b_is > 0 assumes that the delta_ik wi
 spatial homogeneity). In practice, b_is = 1 is commonly used and a value of b_is =< 1 is recommended.
 
 To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
-* To set the value of the  b_is parameter (```-isingbeta flag```)
-* To specify if you want to scale covariables (```-scalecov flag```)
-* To specify the model you want to run (```-auxmodel flag```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile flag```)
-* A prefix to name the output (```-outprefix flag```)
+* The number of populations in the analysis (```-npop```)
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* To set the value of the  b_is parameter (```-isingbeta```)
+* To specify if you want to scale covariables (```-scalecov```)
+* To specify the model you want to run (```-auxmodel```)
+* To provide the omega matrix obtained under the CORE model (```-omegafile```)
+* A prefix to name the output (```-outprefix```)
 
 Run Baypass with the Aux model (in the BayPass container!):
 ```
@@ -439,7 +439,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -auxmodel -isingbeta 1.0 -
 ```
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -513,11 +513,11 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
 To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
-* To specify if you want to scale covariables (```-scalecov flag```)
-* A prefix to name the output (```-outprefix flag```)
+* The number of populations in the analysis (```-npop```)
+* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
+* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* To specify if you want to scale covariables (```-scalecov```)
+* A prefix to name the output (```-outprefix```)
 
 Run BayPass with the STANDARD model importance sampling: 
 
@@ -526,7 +526,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -outprefix hgdpi
 ```
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -597,7 +597,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -o
 ```
 
 ```diff
-- Stop BayPass.
+- Stop BayPass (Ctrl+C)
 
 ```
 
@@ -751,13 +751,13 @@ consider only one covariable at a time (particularly if some covariables are cor
 * Bayes factor mcmc (eBPmcmc) is used to evaluate if a particular SNP is associated with a particular covariable, and as the XtX statistic in the CORE model, they should be calibrated. 
 
 To run this model with allele data you will need:
-* The number of populations in the analysis (```-npop flag```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile flag```).
-* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile flag```).
-* To specify the model you want to run (```-covmcmc flag```)
-* To specify if you want to scale covariables (```-scalecov flag```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile flag```)
-* A prefix to name the output (```-outprefix flag```)
+* The number of populations in the analysis (```-npop```)
+* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```).
+* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* To specify the model you want to run (```-covmcmc```)
+* To specify if you want to scale covariables (```-scalecov```)
+* To provide the omega matrix obtained under the CORE model (```-omegafile```)
+* A prefix to name the output (```-outprefix```)
 
 Run STANDARD model independently with each covariable:
 
@@ -770,7 +770,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates_eu -covmcmc -scalecov -ome
 ```
 
 ```diff
-- Stop BayPass. 
+- Stop BayPass (Ctrl+C) 
 ```
 
 
@@ -842,7 +842,7 @@ g_baypass -npop 52 -gfile G.hgdp_podsmceu_1000 -efile covariates_eu -scalecov -c
 ```
 
 ```diff
-- Stop BayPass. 
+- Stop BayPass (Ctrl+C) 
 
 ```
 
@@ -921,6 +921,5 @@ write.table(bf.mc.eu, file="std.mcmc_signif_eBPmc_eu_SNPs.txt", col.names=T, row
 * Günther T and Coop G. 2013. Robust Identification of Local Adaptation from Allele Frequencies. Genetics 195(1): 205–220.
 * Coop G. Witonsky D, Di Rienzo A, Pritchard JK. 2010. Using environmental correlations to identify loci underlying local adaptation. Genetics 185: 1411–1423.
 * Hoban S, Kelley JL, Lotterhos KE, Antolin MF, Bradburd G, Lowry DB, Poss ML, Reed LK, Storfer A, Whitlock MC. 2016. Finding the Genomic Basis of Local Adaptation: Pitfalls, Practical Solutions, and Future Directions. Am Nat. 188(4): 379–397
-
 
 
