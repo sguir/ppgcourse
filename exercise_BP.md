@@ -608,7 +608,7 @@ hgdp_stdis_10000_pods_param=read.table("hgdp_stdis_10000_pods_summary_betai_reg.
 #Read the PODs file to estimate the 1% threshold for the latitude variable
 hgdp_stdis_10000_pods_BF_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$BF.dB.,probs=0.99)
 
-Latitude
+### Calibrate the STDis BF for Latitude
 #Compute the 1% threshold of eBPis
 hgdp_stdis_10000_pods_eBPis_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$eBPis,probs=0.99)
 #Compute the 1% right threshold of Beta_is
