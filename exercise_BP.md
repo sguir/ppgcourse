@@ -15,21 +15,23 @@ These two SNPs have been previously reported to be under positive selection in E
 
 ## Get data
 The data for this session can be retrieved from google drive [data](https://github.com/ppgcourseUB/ppgcourse2022/tree/main/Adaptive_differentiaion%20_and_covariates%20association.SARA_GUIRAO-RICO)  
-   
-Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata).  
-
-Then, go back to the container terminal and type:
-
+ 
 ```bash
-cd ppgdata
-tar -xvzf ppg_bp_2019.tar.gz
+svn export https://github.com/ppgcourseUB/ppgcourse2022/tree/main/Adaptive_differentiaion%20_and_covariates%20association.SARA_GUIRAO-RICO
 ```
-The folder BayPass.SARA_GUIRAO-RICO has three main subfolders:
+
+The folder has two main subfolders:
 
 * input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
-* results: previously obtained results for a matter of visualization.   
 * scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
+Get also the precomputed results
+
+```bash
+
+
+```
+* results: previously obtained results for a matter of visualization.
 
 The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
