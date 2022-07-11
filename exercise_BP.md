@@ -87,18 +87,11 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core
 
 This will generate 7 files for each seed.
 
-Dowload the obtained results :
-
-```bash
-cd ppgdata/ppg_bp_2019/forR/CORE
-cp *  /ppgdata/baypass/
-```
-
 Create a new folder "my_results" in your personal computer and dowload the obtained results and the script "baypass_utils.R"
 
 ```bash
 mkdir my_results
-scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICOhgdp_core_s* ./my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* ./my_results
 cd my_results
 ```
 2. Sanity Check. 
@@ -271,8 +264,9 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 ```bash
 module load r-mvtnorm
+
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 #Open R
@@ -314,7 +308,7 @@ simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000,
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -329,7 +323,10 @@ g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000
 Copy the previously obtained results and also those precomputed for 100,000 PODs to the my_results folder in your personal computer:
 
 ```bash
-scp G.hgdp_pods_1000 hgdp_pod_1000_* ./my_results
+scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/G.hgdp_pods_1000 ./my_results
+
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_pod_1000_* ./my_results
+
 scp /results/CORE_Model/simulations/100000/*_100000*
 cd my_results
 ```
@@ -423,7 +420,7 @@ To run this model (with allele data) you will need:
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -436,7 +433,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -out
 Copy the previously obtained results to the my_results folder in your personal computer:
 
 ```bash
-scp hgdp_stdis_* ./my_results
+scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* ./my_results
 cd my_results
 ```
 2. Inspect the obtained results.
@@ -520,7 +517,7 @@ dev.off()
 ```bash
 module load r-mvtnorm
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 #Open R
@@ -560,7 +557,7 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -573,7 +570,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthread
 Copy the previously obtained results to the my_results folder in your personal computer:
 
 ```bash
-scp *_10000* ./my_results
+scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* ./my_results
 cd my_results
 ```
 3.3. Sanity check.
@@ -747,7 +744,7 @@ To run this analysis (with allele data) you will need:
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -760,7 +757,7 @@ g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariate
 Copy the previously obtained results to the my_results folder in your personal computer:
 
 ```bash
-scp hgdp_contrast_* ./my_results
+scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_contrast_* ./my_results
 cd my_results
 ```
 2. Inspect the obtained results.
@@ -787,7 +784,7 @@ dev.off()
 ```bash
 module load r-mvtnorm
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 #Open R
@@ -829,7 +826,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -842,7 +839,7 @@ g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efil
 Copy the previously obtained results to the my_results folder in your personal computer:
 
 ```bash
-scp *_contrast_10000* *C2_10000* ./my_results
+scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* *C2_10000* ./my_results
 cd my_results
 ```
 
