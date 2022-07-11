@@ -603,8 +603,7 @@ dev.off()
 ```R
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
 hgdp_stdis_10000_pods_param=read.table("hgdp_stdis_10000_pods_summary_betai_reg.out",h=T)
-
-### Calibrate the STDis BF for 
+ 
 #Read the PODs file to estimate the 1% threshold for the latitude variable
 hgdp_stdis_10000_pods_BF_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$BF.dB.,probs=0.99)
 
@@ -616,7 +615,7 @@ hgdp_stdis_10000_pods_Beta_is_thresh1_lat=quantile(hgdp_stdis_10000_pods_param[h
 #Compute the 1% left threshold of Beta_is
 hgdp_stdis_10000_pods_Beta_is_thresh2_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$Beta_is,probs=0.01)
 
-#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+#Plot the observed parameters with the new empiral thresholds obtained from the PODs
 pdf("stdis_model_calibrated_lat.pdf")
 layout(matrix(1:3,3,1))
 plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$BF.dB.,
@@ -650,7 +649,7 @@ hgdp_stdis_10000_pods_Beta_is_thresh1_lon=quantile(hgdp_stdis_10000_pods_param[h
 #Compute the 1% left threshold of Beta_is
 hgdp_stdis_10000_pods_Beta_is_thresh2_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$Beta_is,probs=0.01)
 
-#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+#Plot the observed parameters with the new empiral thresholds obtained from the PODs
 pdf("stdis_model_calibrated_lon.pdf")
 layout(matrix(1:3,3,1))
 plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$BF.dB.,
@@ -684,7 +683,7 @@ hgdp_stdis_10000_pods_Beta_is_thresh1_eu=quantile(hgdp_stdis_10000_pods_param[hg
 #Compute the 1% left threshold of Beta_is
 hgdp_stdis_10000_pods_Beta_is_thresh2_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$Beta_is,probs=0.01)
 
-#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+#Plot the observed parameters with the new empiral thresholds obtained from the PODs
 pdf("stdis_model_calibrated_eu.pdf")
 layout(matrix(1:3,3,1))
 plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$BF.dB.,
