@@ -100,7 +100,7 @@ mkdir my_results
 scp hgdp_core_s* ./my_results
 cd my_results
 ```
-2. Sanity Check
+2. Sanity Check. 
 2.1. Install R packages and compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
@@ -130,48 +130,48 @@ dist.23=fmd.dist(omega_s2, omega_s3)
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
-Setup the population names for each omega matrix:
+3. Visualization of the shared history of populations.
+3.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
 
 ```R
-pop.names=c("Papuan","Melanesian","Surui","Pima","Maya","Karitiana","Columbian","Yi","Yaku","Xibo","Uygur","Tujia","Tu","She","Orogen","Naxi","Mongolia","Miao","Lahu","Japanese","Hezhen","Han","Daur","Dal","Cambodian","Sindhi","Pathan","Makrani","Kalash","Hazara","Burusho","Brahui","Balochi","Palestinian","Mozabite","Druze","Bedouin","Tuscan","Sardinian","Russian","Orcadian","French","Italian","Basque","Adygei","Yoruba","San","MbutiPygmy","Mandenka","BiakaPygmy","BantuSouthAfrica","BantuKenya")
-
+#Setup the population names for each omega matrix:
+pop.names=c("Papuan","Melanesian","Surui","Pima","Maya","Karitiana","Columbian","Yi","Yaku","Xibo","Uygur","Tujia","Tu","She","Orogen","Naxi","Mongolia","Miao","Lahu","Japanese","Hezhen","Han","Daur",
+"Dal","Cambodian","Sindhi","Pathan","Makrani","Kalash","Hazara","Burusho","Brahui","Balochi","Palestinian","Mozabite","Druze","Bedouin","Tuscan","Sardinian","Russian","Orcadian","French","Italian","Basque",
+"Adygei","Yoruba","San","MbutiPygmy","Mandenka","BiakaPygmy","BantuSouthAfrica","BantuKenya")
 dimnames(omega_s1)=list(pop.names,pop.names)
-dimnames(omega_s2)=list(pop.names,pop.names)
-dimnames(omega_s3)=list(pop.names,pop.names)
-```
 
-We can explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix or a bifurcating phylogenetic tree:
-
-Transform the omega covariance matrix into a correlation matrix using the R function cov2cor():
-
-```R
+#Transform the omega covariance matrix into a correlation matrix
 cor.mat_s1=cov2cor(omega_s1)
-cor.mat_s2=cov2cor(omega_s2)
-cor.mat_s3=cov2cor(omega_s3)
-```
 
-Plot the omega correlation matrix (here only for seed1):
-
-```R
+#Plot the omega correlation matrix (here only for seed1):
 pdf(file="correlation_matrix_core_model.pdf")
-corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1, main=expression("Seed1: Correlation map based on"~hat(Omega)), tl.cex=0.5)
+corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1, 
+		main=expression("Correlation map based on"~hat(Omega)), 
+		tl.cex=0.5)
 dev.off()
 ```
 
-Transform the correlation matrix into a hierarchical clustering tree using the R function hclust():
+3.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
+
 
 ```R
-bta14.tree_s1=as.phylo(hclust(as.dist(1-cor.mat_s1**2)))
-bta14.tree_s2=as.phylo(hclust(as.dist(1-cor.mat_s2**2)))
-bta14.tree_s3=as.phylo(hclust(as.dist(1-cor.mat_s3**2)))
-```
+#Transform the correlation matrix into a hierarchical clustering tree
+hgdp.tree_s1=as.phylo(hclust(as.dist(1-cor.mat_s1**2)))
 
-Plot the hierarchical clustering tree (here ony for seed1):
-
-```R
+#Plot the hierarchical clustering tree (here ony for seed1):
 pdf(file="correlation_matrix_core_model_tree.pdf")
-plot(bta14.tree_s1, type="p",
-main=expression("Seed1: Hier. clust. tree based on"~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"), cex=0.5)
+plot(hgdp.tree_s1, type="p", 
+	main=expression("Hier. clust. tree based on"~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"), 
+	cex=0.5)
+dev.off()
+```
+3.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
+
+```R
+pdf(file="omega_heatmap.pdf")
+hclust.ave <- function(x) hclust(x, method="average")
+heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
+	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
 
