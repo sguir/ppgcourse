@@ -56,7 +56,8 @@ To run this model (using read count data) you will need:
 
 ** For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
+
+1. Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
 
 ```
 #!/bin/bash                                                                                                             
@@ -99,7 +100,8 @@ mkdir my_results
 scp hgdp_core_s* ./my_results
 cd my_results
 ```
-Install R packages and upload the estimate of omega (covariance matrix) for each seed:
+
+2. Install R packages and upload the estimate of omega (covariance matrix) for each seed:
 
 ```R
 #Install four R packages
