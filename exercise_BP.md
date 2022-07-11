@@ -325,7 +325,7 @@ scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptiv
 
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_pod_1000_* ./my_results
 
-scp /results/CORE_Model/simulations/100000/*_100000*
+scp ./results/CORE_Model/simulations/100000/*_100000* ./my_results
 cd my_results
 ```
   
