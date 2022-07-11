@@ -79,9 +79,9 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (CORE Model) with different seeds
-./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core_s1
-./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 26847 -outprefix hgdp_core_s2
-./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core_s3
+g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core_s1
+g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 26847 -outprefix hgdp_core_s2
+g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core_s3
 ```
 
 This will generate 7 files for each seed.
@@ -285,7 +285,7 @@ INPUT=../input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
-module load BayPass   
+module load r-mvtnorm
 
 # get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
@@ -325,7 +325,7 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (CORE Model) with the 1000 PODs as input
-./g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
+g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
 ```
 
 > * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
@@ -434,7 +434,7 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (STDis Model)
-./g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
+g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
 ```
 
 Copy the previously obtained results to the my_results folder in your personal computer:
@@ -538,7 +538,7 @@ INPUT=../input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
-module load BayPass   
+module load r-mvtnorm
 
 # get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
@@ -554,7 +554,7 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 	sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_10000")
 ```
 
-3.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch..
+3.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch.
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -576,7 +576,7 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (CORE Model) with the 10000 PODs as input
-./g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
+g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
 Copy the previously obtained results to the my_results folder in your personal computer:
@@ -729,10 +729,9 @@ dev.off()
 ## The STDis and CONTRAST Model
 This "combined" analysis allows to evaluate to which extent the population binary covariables are associated to specific marker/SNP using two different approaches: i) running the STDis model and hence, testing are (linearly) associated to each marker/SNP or ii) performing a contrast analysis to compute contrast of standardized allele frequencies between two groups of populations.
 
-The contrast anaysis can be if the assumed linear relationship with allele frequencies is not entirely satisfactory 
+* The contrast anaysis can be if the assumed linear relationship with allele frequencies is not entirely satisfactory 
 
-In addition, the association analyses carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
-
+* In addition, the association analyses carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
 
 To run this analysis (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
@@ -742,8 +741,184 @@ To run this analysis (with allele data) you will need:
 * To specify if you want to scale covariables (```-scalecov```)
 * A prefix to name the output (```-outprefix```)
  
+1. Run the STDis and the Contrast Model by submit the job script "run_stdis_contr_model.sh" with the command sbatch. 
 
+```bash
+#!/bin/bash                                                                                                             
 
+# define names                                                                                                          
+#SBATCH --job-name=bp_stdis_contr                                                                                         
+#SBATCH --error bp_stdis_contr-%j.err                                                                                     
+#SBATCH --output bp_stdis_contr-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (STDis and Contrast Model)
+g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
+````
+
+Copy the previously obtained results to the my_results folder in your personal computer:
+
+```bash
+scp hgdp_contrast_* ./my_results
+cd my_results
+```
+2. Inspect the obtained results.
+
+```R
+#Read the files with the BF and the C2
+covariates_eu.bf=read.table("hgdp_contrast_summary_betai_reg.out",h=T)$BF.dB.
+covariates_eu.C2=read.table("hgdp_contrast_summary_contrast.out",h=T)
+
+#Check the behavior of the P-values associated to the C2
+pdf("C2_pvals_hist.pdf")
+hist(10**(-1*covariates_eu.C2$log10.1.pval.),freq=F,breaks=50,
+    main=expression('C2 '*italic(P)*'-value distribution'), 
+    xlab=expression(italic(P)*'-value'))
+	abline(h=1)
+dev.off()
+```
+```QUESTION: Are the C2 P-values behaving well?```
+
+3. Calibrate C2 statistics.
+
+3.1.Simulate 10000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
+
+```bash
+#!/bin/bash                                                                                                             
+
+# define names                                                                                                          
+#SBATCH --job-name=bp_10000_c2_sim                                                                                         
+#SBATCH --error bp_10000_c2_sim-%j.err                                                                                     
+#SBATCH --output bp_10000_c2_sim-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load r-mvtnorm  
+
+# get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution
+c2.pi.beta.coef=read.table("hgdp_contrast_summary_beta_params.out",h=T)$Mean
+
+# upload the original data to obtain total allele count
+hgdp.data<-geno2YN("hgdp.geno")
+
+# read the omega matrix:
+omega_contrast=as.matrix(read.table(file="hgdp_contrast_mat_omega.out", header=F))
+
+# generate 10000 PODs
+simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
+	sample.size=hgdp.data$NN, beta.pi=c2.pi.beta.coef, pi.maf=0, 
+	suffix="hgdp_C2_10000_pods")
+
+```
+
+3.2. Run the STDis and contrast Models with the 10000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
+
+```bash
+#!/bin/bash                                                                                                             
+
+# define names                                                                                                          
+#SBATCH --job-name=bp_stdis_contr                                                                                         
+#SBATCH --error bp_stdis_contr-%j.err                                                                                     
+#SBATCH --output bp_stdis_contr-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (CORE Model) with the 10000 c2 PODs as input
+g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
+```
+
+Copy the previously obtained results to the my_results folder in your personal computer:
+
+```bash
+scp *_contrast_10000* *C2_10000* ./my_results
+cd my_results
+```
+
+3.3. Sanity Check.
+
+```R
+#Get estimate of omega from the PODs
+pod.c2.omega=as.matrix(read.table("hgdp_contrast_10000_pods_mat_omega.out"))
+plot(pod.c2.omega,omega_contrast) 
+    abline(a=0,b=1)
+#Get the distance between the simulated nd the real omega    
+fmd.dist(pod.c2.omega,omega_contrast)
+
+#Get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the POD analysis
+pod.c2.pi.beta.coef=read.table("hgdp_contrast_10000_pods_summary_beta_params.out",h=T)$Mean
+plot(pod.c2.pi.beta.coef,c2.pi.beta.coef) 
+    abline(a=0,b=1)
+```
+
+3.4. C2 and BF calibration.
+
+```R
+#Read the files with the simulated C2 and BF
+pod.c2_10000=read.table("hgdp_contrast_10000_pods_summary_contrast.out",h=T)
+pod.BF.10000=read.table("hgdp_contrast_10000_pods_summary_betai_reg.out",h=T)
+
+#compute the 1% threshold of BF
+pod.c2_10000_thresh=quantile(pod.c2_10000$M_C2,probs=0.99)
+pod.BF_10000_thresh=quantile(pod.BF.10000$BF.dB.,probs=0.99)
+
+#Plot the observed C2 and BF with the new thresholds obtained from PODs
+pdf("Calibrated_C2_and_BF.pdf")
+plot(covariates_eu.bf,covariates_eu.C2$M_C2,
+	xlab="calibrated BF",ylab="calibrated C2")
+	abline(h=pod.c2_10000_thresh,lty=2) #
+	abline(v=pod.BF_10000_thresh,lty=2) #
+	points(x=covariates_eu.bf.all[covariates_eu.bf.all[,2]==2334, ]$BF.dB., 
+	y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2334, ]$M_C2, col="red", pch=20)
+	points(x=covariates_eu.bf.all[covariates_eu.bf.all[,2]==2335, ]$BF.dB., y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2335, ]$M_C2, col="red", pch=20)
+dev.off()
+```
+
+3.5. Plot the observed C2 and BF calibration for a matter of comparison.
+
+```R
+#Read the obtained results
+covariates_eu.bf.all <-
+read.table(file="hgdp_contrast_summary_betai_reg.out", h=T)
+
+#Plot
+pdf("C2_and_BF_and_Pvals.pdf")
+plot(covariates_eu.bf,covariates_eu.C2$log10.1.pval.,
+	xlab="BF",ylab="C2 p-value (-log10 scale)")
+	abline(h=3,lty=2) #0.001 p--value theshold
+	abline(v=10,lty=2) #BF threshold for strong evidence (according to Jeffreys’ rule)
+	points(x=covariates_eu.bf.all[covariates_eu.bf.all[,2]==2334, ]$BF.dB., 
+		y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2334, ]$log10.1.pval., col="red", pch=20)
+	points(x=covariates_eu.bf.all[covariates_eu.bf.all[,2]==2335, ]$BF.dB., 
+		y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2335, ]$log10.1.pval., col="red", pch=20)
+dev.off()
+```
+```QUESTION:  ```
 ### BIBLIOGRAPHY
 
 * Gautier M. 2015. Genome-Wide Scan for Adaptive Divergence and Association with Population-Specific Covariates. Genetics 201(4): 1555–1579. 
