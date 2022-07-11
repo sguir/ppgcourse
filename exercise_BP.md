@@ -55,36 +55,67 @@ To run this model (using read count data) you will need:
 * A prefix to name the output (```-outprefix```)
 
 ** For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
-Run BayPass under the CORE model with three different seeds:
+
+Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
 
 ```
-g_baypass -npop 52 -gfile hgdp.geno -seed 15263 -outprefix hgdp_s1
+#!/bin/bash                                                                                                             
 
-g_baypass -npop 52 -gfile hgdp.geno -seed 26847 -outprefix hgdp_s2
+# define names                                                                                                          
+#SBATCH --job-name=bp_core                                                                                         
+#SBATCH --error bp_core-%j.err                                                                                     
+#SBATCH --output bp_core-%j.out                                                                                    
 
-g_baypass -npop 52 -gfile hgdp.geno -seed 94875 -outprefix hgdp_s3
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (CORE Model) with different seeds
+./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core_s1
+./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 26847 -outprefix hgdp_core_s2
+./g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core_s3
 ```
 
-On the screen, it will apear the specifications of the input file (number of markers, Genotype file name...) and the specifications of the MCMC.
+This will generate 7 files for each seed.
 
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
-
-Copy the previously obtained results to the baypass folder:
+Dowload the obtained results :
 
 ```bash
 cd ppgdata/ppg_bp_2019/forR/CORE
 cp *  /ppgdata/baypass/
 ```
 
-Upload the estimate of omega (covariance matrix) for each seed:
+Create a new folder "Results" in your personal computer and dowload the obtained results and the script "baypass_utils.R"
+
+```bash
+mkdir my_results
+scp hgdp_core_s* ./my_results
+cd my_results
+```
+Install R packages and upload the estimate of omega (covariance matrix) for each seed:
 
 ```R
-omega_s1=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
-omega_s2=as.matrix(read.table(file="hgdp_s2_mat_omega.out", header=F))
-omega_s3=as.matrix(read.table(file="hgdp_s3_mat_omega.out", header=F))
+#Install four R packages
+install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+require(corrplot); require(ape); require(geigen);require(mvtnorm)
+source("baypass_utils.R")
+
+#Read omegas obtained from reunning the core model wth three different seeds
+omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
+omega_s2=as.matrix(read.table(file="hgdp_core_s2_mat_omega.out", header=F))
+omega_s3=as.matrix(read.table(file="hgdp_core_s3_mat_omega.out", header=F))
+
+#Plot the comparison between omega-seed1 and omega-seed2:
+pdf(file="omega_s1_s2_comparison.pdf")
+	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
+dev.off()
 ```
 
 Setup the population names for each omega matrix:
