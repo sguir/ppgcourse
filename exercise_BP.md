@@ -56,7 +56,6 @@ To run this model (using read count data) you will need:
 
 ** For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-
 1. Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
 
 ```
@@ -93,7 +92,7 @@ cd ppgdata/ppg_bp_2019/forR/CORE
 cp *  /ppgdata/baypass/
 ```
 
-Create a new folder "Results" in your personal computer and dowload the obtained results and the script "baypass_utils.R"
+Create a new folder "my_results" in your personal computer and dowload the obtained results and the script "baypass_utils.R"
 
 ```bash
 mkdir my_results
@@ -199,7 +198,7 @@ dev.off()
 ```
 ```QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?```
 
-5. Check behavior of the P-values associated to the XtXst estimator.
+5. Check behavior of the *P*-values associated to the XtXst estimator.
 
 ```R
 pdf("omega_XtXst_pvals_hist.pdf")
@@ -224,7 +223,7 @@ dev.off()
 ```
 ```QUESTION: Where are the two putative outliers (red points)?```
 
-5.1. Inspect the P-values associated two the two putative outliers.
+5.1. Inspect the *P*-values associated two the two putative outliers.
 
 ```R
 #Inspect the P-values associated two the two putative outliers
@@ -712,7 +711,7 @@ plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$Beta_is,
 	mtext("STDis Model: European Origin",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 ```
-```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?```
+```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what criteria, BF or eBPis? Are all of them correlating in the same way?```
 
 # EXTRA EXERCISES
 
