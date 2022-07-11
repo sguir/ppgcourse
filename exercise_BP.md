@@ -126,11 +126,12 @@ dist.12=fmd.dist(omega_s1, omega_s2)
 dist.13=fmd.dist(omega_s1, omega_s3)
 dist.23=fmd.dist(omega_s2, omega_s3)
 ```
-* QUESTION: Are they more or less the same?
+```QUESTION: Are they more or less the same?
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
 3. Visualization of the shared history of populations.
+
 3.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
 
 ```R
@@ -174,40 +175,29 @@ heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
 	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
+3.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
 
-* We can compare the omega matrices obtained under the CORE model when using different seeds.   
-* Remember that we run the CORE model with different seeds to check consistency in the estimation of parameters of the model.
-
-Plot the comparison between omega-seed1 and omega-seed2:
-```R
-pdf(file="omega_s1_s2_comparison.pdf")
-plot(omega_s1, omega_s2) ; abline(a=0,b=1)
+```r
+pdf(file="omega_PCA-like.pdf")
+plot.omega(omega_s1,PC=c(1,2),pop.names=pop.names,
+	main=expression("SVD of "*Omega),
+	col=rainbow(nrow(omega_s1)), pch=20,pos=3)
 dev.off()
 ```
+> * If you want to modify the size of the text you should modify the baypass_utils.R
 
-Compute the distances between pairs of omegas:
+4. Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
 
-```R
-dist.12=fmd.dist(omega_s1, omega_s2)
-dist.13=fmd.dist(omega_s1, omega_s3)
-dist.23=fmd.dist(omega_s2, omega_s3)
-```
+```r
+#Read the XtX file (here only for seed1):
+hgdp_s1.snp.res=read.table("hgdp_core_s1_summary_pi_xtx.out",h=T)
+head(hgdp_s1.snp.res)
 
-If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses.
-
-Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
-
-Read the XtX file (here only for seed1):
-
-```R
-hgdp_s1.snp.res=read.table("hgdp_s1_summary_pi_xtx.out",h=T)
-```
-
-Plot the XtX values:
-
-```R
-pdf(file="XtX_core_model_seed1_non-calibrated.pdf")
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNPs", ylab="XtX", main="Seed 1")
+#Plot the XtXst values:
+pdf(file="XtXst_core_model.pdf")
+plot(hgdp_s1.snp.res$XtXst, xlab="SNP", ylab="XtXst", main="XtXst Seed 1")
+	points(x= 2334, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2334, ]$XtXst, col = "red", pch=20)
+	points(x= 2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$XtXst, col = "red", pch=20)
 dev.off()
 ```
 ```QUESTION: which XtX values are significantly different?```
