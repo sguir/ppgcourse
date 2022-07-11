@@ -711,7 +711,7 @@ dev.off()
 
 # EXTRA EXERCISES
 
-## The STDis and CONTRAST Model
+## The STDis Model and CONTRAST Analysis
 This "combined" analysis allows to evaluate to which extent the population binary covariables are associated to specific marker/SNP using two different approaches: i) running the STDis model and hence, testing are (linearly) associated to each marker/SNP or ii) performing a contrast analysis to compute contrast of standardized allele frequencies between two groups of populations.
 
 * The contrast anaysis can be if the assumed linear relationship with allele frequencies is not entirely satisfactory 
