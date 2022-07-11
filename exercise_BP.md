@@ -100,8 +100,8 @@ mkdir my_results
 scp hgdp_core_s* ./my_results
 cd my_results
 ```
-
-2. Install R packages and upload the estimate of omega (covariance matrix) for each seed:
+2. Sanity Check
+2.1. Install R packages and compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
 #Install four R packages
@@ -119,6 +119,21 @@ pdf(file="omega_s1_s2_comparison.pdf")
 	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
 dev.off()
 ```
+2.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
+
+```R
+dist.12=fmd.dist(omega_s1, omega_s2)
+dist.13=fmd.dist(omega_s1, omega_s3)
+dist.23=fmd.dist(omega_s2, omega_s3)
+```
+* QUESTION: Are they more or less the same?
+
+
+```diff
+> * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
+
+```
+
 
 Setup the population names for each omega matrix:
 
