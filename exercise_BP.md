@@ -126,7 +126,7 @@ dist.12=fmd.dist(omega_s1, omega_s2)
 dist.13=fmd.dist(omega_s1, omega_s3)
 dist.23=fmd.dist(omega_s2, omega_s3)
 ```
-```QUESTION: Are they more or less the same?
+```QUESTION: Are they more or less the same?```
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
@@ -177,7 +177,7 @@ dev.off()
 ```
 3.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
 
-```r
+```R
 pdf(file="omega_PCA-like.pdf")
 plot.omega(omega_s1,PC=c(1,2),pop.names=pop.names,
 	main=expression("SVD of "*Omega),
@@ -188,7 +188,7 @@ dev.off()
 
 4. Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
 
-```r
+```R
 #Read the XtX file (here only for seed1):
 hgdp_s1.snp.res=read.table("hgdp_core_s1_summary_pi_xtx.out",h=T)
 head(hgdp_s1.snp.res)
@@ -200,7 +200,40 @@ plot(hgdp_s1.snp.res$XtXst, xlab="SNP", ylab="XtXst", main="XtXst Seed 1")
 	points(x= 2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$XtXst, col = "red", pch=20)
 dev.off()
 ```
-```QUESTION: which XtX values are significantly different?```
+```QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?```
+
+5. Check behavior of the P-values associated to the XtXst estimator.
+
+```R
+pdf("omega_XtXst_pvals_hist.pdf")
+hist(10**(-1*hgdp_s1.snp.res$log10.1.pval.),freq=F,breaks=50, 
+    main=expression('XtXst '*italic(P)*'-value distribution'), 
+    xlab=expression(italic(P)*'-value'))
+	abline(h=1)
+dev.off()
+
+#Plot the XtXst and their respective P-values
+pdf("omega_XTXst_and_Pvals.pdf")
+layout(matrix(1:2,2,1))
+plot(hgdp_s1.snp.res$XtXst,xlab="SNP", ylab="XtXst", main="XtXst" )
+	points(x=2334, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2334, ]$XtXst, col="red", pch=20)
+	points(x=2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2335, ]$XtXst, col="red", pch=20)
+plot(hgdp_s1.snp.res$log10.1.pval.,ylab=expression('XtXst '*italic(P)*'-value (-log10 scale)'), 
+    xlab="SNP", main=expression('XtXst '*italic(P)*'-value'))
+	points(x=2334, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2334, ]$log10.1.pval., col="red", pch=20)
+	points(x=2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2335, ]$log10.1.pval., col="red", pch=20)
+	abline(h=3,lty=2) #correspods to a P-value theshold = 0.001
+dev.off()
+```
+```QUESTION: Where are the two putative outliers (red points)?```
+
+5.1. Inspect the P-values associated two the two putative outliers.
+
+```R
+#Inspect the P-values associated two the two putative outliers
+hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2334, ]$log10.1.pval.
+hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
+```
 
 ### Pseudo Observed Data (PODs) 
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
