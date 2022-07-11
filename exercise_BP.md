@@ -133,7 +133,6 @@ dist.23=fmd.dist(omega_s2, omega_s3)
 3. Visualization of the shared history of populations.
 
 3.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
-
 ```R
 #Setup the population names for each omega matrix:
 pop.names=c("Papuan","Melanesian","Surui","Pima","Maya","Karitiana","Columbian","Yi","Yaku","Xibo","Uygur","Tujia","Tu","She","Orogen","Naxi","Mongolia","Miao","Lahu","Japanese","Hezhen","Han","Daur",
@@ -259,6 +258,7 @@ sum(qvals < 0.01)
 > * In case the *P*-values of the XtXst do not behave well, you will need to perform "neutral" simulations (Pseudo Observed Data –PODs–).
 
 7. Pseudo Observed Data (PODs) 
+
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
 PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the
 overall (across population) SNP allele frequencies).
@@ -330,272 +330,72 @@ module load BayPass
 
 > * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
-Copy the previously obtained results to the baypass folder:
+Copy the previously obtained results and also those precomputed for 100,000 PODs to the my_results folder in your personal computer:
 
 ```bash
-cd ppgdata/ppg_bp_2019/forR/PODS/CORE/1000
-cp *  /ppgdata/baypass/
-
-cd ppgdata/ppg_bp_2019/forR/PODS/CORE/100000
-cp *  /ppgdata/baypass/
-
+scp G.hgdp_pods_1000 hgdp_pod_1000_* ./my_results
+scp /results/CORE_Model/simulations/100000/*_100000*
+cd my_results
 ```
+  
+7.2. Sanity Check.
 
-### Sanity Check 
 Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
-In other words, if the model we have inferred is able to generate data similar to those observed.
+In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
 
-#### 1000 PODS
-Get the omega estimated from the PODs:
 ```R
+#Get the omega estimated from the PODs:
 pod.omega_1000=as.matrix(read.table("hgdp_pod_1000_mat_omega.out"))
-```
 
-Plot the observed versus the simulated omegas:
-```R
-pdf(file="comparison_omega_obs_sim_1000pods.pdf")
-plot(pod.omega_1000, omega_s1) ; abline(a=0,b=1)
+#Plot the observed versus the simulated omegas:
+pdf(file="comparison_omega_obs_sim_1000_pods.pdf")
+plot(pod.omega_1000, omega_s1, xlab="Omega from PODs", 
+    ylab="Omega from real data", main="1000 PODs") 
+	abline(a=0,b=1)
 dev.off()
-```
 
-Compute the distance between the observed and simulated omegas
-```R
+#Compute the distance between the observed and simulated omegas
 fmd.dist(pod.omega_1000, omega_s1)
-```
 
-Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the PODs:
-```R
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the PODs:
 pod.pi.beta.coef_1000=read.table("hgdp_pod_1000_summary_beta_params.out",h=T)$Mean
-```
 
-Plot the observed versus the simulated pi.beta:
-```R
-pdf(file="comparison_pi.beta_obs_sim_1000pods.pdf")
-plot(pod.pi.beta.coef_1000, pi.beta.coef) ; abline(a=0,b=1)
+#Plot the observed versus the simulated pi.beta:
+pdf(file="comparison_pi.beta_obs_sim_1000_pods.pdf")
+plot(pod.pi.beta.coef_1000, pi.beta.coef, 
+	xlab="pi.beta from PODs", ylab="pi.beta from real data", main="1000 PODs") 
+	abline(a=0,b=1)
 dev.off()
-```
 
-#### 100000 PODS
-Get the omega estimated from the PODs:
-```R
+### For 100000 PODS
+#Get the omega estimated from the PODs:
 pod.omega_100000=as.matrix(read.table("hgdp_pod_100000_mat_omega.out"))
-```
 
-Plot the observed versus the simulated omegas:
-```R
-pdf(file="comparison_omega_obs_sim_100000pods.pdf")
-plot(pod.omega_100000, omega_s1) ; abline(a=0,b=1)
+#Plot the observed versus the simulated omegas:
+pdf(file="comparison_omega_obs_sim_100000_pods.pdf")
+plot(pod.omega_100000, omega_s1, xlab="Omega from PODs", 
+    ylab="Omega from real data", main="100000 PODs") 
+	abline(a=0,b=1)
 dev.off()
-```
 
-Distance between the observed and the simulated omegas:
-```R
+#Compute the distance between the observed and simulated omegas:
 fmd.dist(pod.omega_100000, omega_s1)
-```
 
-Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the PODs:
-```R
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the PODs:
 pod.pi.beta.coef_100000=read.table("hgdp_pod_100000_summary_beta_params.out",h=T)$Mean
-```
 
-Plotting the observed versus the simulated pi.beta:
-```R
-pdf(file="comparison_pi.beta_obs_sim_100000pods.pdf")
-plot(pod.pi.beta.coef_100000, pi.beta.coef) ; abline(a=0,b=1)
+#Plot the observed versus the simulated pi.beta:
+pdf(file="comparison_pi.beta_obs_sim_100000_pods.pdf")
+plot(pod.pi.beta.coef_100000, pi.beta.coef, xlab="pi.beta from PODs", 
+	ylab="pi.beta from real data", main="100000 PODs")
+	abline(a=0,b=1)
 dev.off()
 ```
-```QUESTION: What is the main difference when comparing the two simulation experiments (1000 and 1000000 PODs) to the observed data?```
+```QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?```
+    
+> * The file rs_ids_2335.txt in the folder input_data is a "map" file associated to you original geno file with the name of each SNP (chromosome and position can be found in NCBI database)
 
-### XtX calibration 
-Remember that this is for building the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected 
-
-Get the POD XtX's (1000 pods):
-```R
-pod.xtx=read.table("hgdp_pod_1000_summary_pi_xtx.out", h=T)$M_XtX
-```
-Compute the 1% threshold using the R function quantile(): 
-```R
-pod.thresh=quantile(pod.xtx, probs=0.99)
-```
-
-Add the threshold to the XtX observed data plot: 
-```R
-pdf(file="XtX_calibration_core_model_1000.pdf")
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNPs", ylab=" XtX ")
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-```
-
-Retrieve the SNPs that are significant (XtX): 
-```R
-snps.sign.xtx <- hgdp_s1.snp.res[hgdp_s1.snp.res$M_XtX >= pod.thresh, ]
-write.table(snps.sign.xtx, file="significant_SNPs_XtX.txt", col.names=T, row.names=F, quote=F, sep="\t")
-```
-
-```QUESTION: Which are the SNPs that are significant?```   
- 
-The file rs_ids_2335.txt in the folder input_data is a "map" file associated to you original geno file with the name of each SNP (chromosome and position can be found in NCBI database)
-
-## The AUX Model
-This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
-The introduction of an auxiliary variable (delta) in the AUX model indicates whether a specific SNP i can
-be regarded as associated to a given covariable k (delta_ik = 1) or not (delta_ik = 0).
-We can compare both models (association and no-association) through Bayes Factor (BFmc) while dealing with multiple testing issues.
-
-It is (strongly) recommended to scale each covariate (so that the mean = 0 and the std = 1 for each covariable). 
-The scalecov option allows to perform this step automatically prior to analysis, if needed.
-
-To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* To specify if you want to scale covariables (```-scalecov```)
-* To specify the model you want to run (```-auxmodel```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile```)
-* A prefix to name the output (```-outprefix```)
-
-Run the AUX model (remember, in the BayPass container!):
-
-```
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -auxmodel -omegafile hgdp_s1_mat_omega.out -outprefix hgdpaux
-```
-
-On the screen, it will apear the specifications of the input file (number of markers, Genotype file name, Covariables file...) and the specifications of the MCMC.
-
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
-
-Copy the previously obtained results to the baypass folder:
-
-```bash
-cd ppgdata/ppg_bp_2019/forR/AUX/
-cp *  /ppgdata/baypass/
-
-```
-
-Get the regression coefficients (posterior mean) for each SNP:
-```R
-covaux.snp.res=read.table("hgdpaux_summary_betai.out",h=T)
-```
-
-Plot the resulting estimates of the Bayes Factor, the underlying regression coefficients (posterior mean) and the calibrated XtX:
-
-```R
-pdf(file="plot_Aux_model_results.pdf")
-layout(matrix(1:3,3,1))
-plot(covaux.snp.res$BF.dB., xlab="SNP",ylab="BFmc (in dB)")
-abline(h=10, lty=2, col="green")
-abline(h=15, lty=2, col="blue")
-abline(h=20, lty=2, col="red")
-plot(covaux.snp.res$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS")
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-```
-* Blue, green and red lines in the BF plot are depicting the thresholds for the SNPs with strong, very strong and decisive evidence of association, respectively.
-* Note that the calibrated XtX values were obtained from the CORE model using PODs.
-* Note also that the X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
-
-Retrieve the SNPs with strong (se), very strong (vse) and decisive evidence (de) of significant association:
-```R
-se.bf <- covaux.snp.res[covaux.snp.res$BF.dB. > 10 & covaux.snp.res$BF.dB. < 15, ]
-vse.bf <- covaux.snp.res[covaux.snp.res$BF.dB. > 15 & covaux.snp.res$BF.dB. < 20, ]
-de.bf <- covaux.snp.res[covaux.snp.res$BF.dB. >= 20, ]
-
-write.table(se.bf, file="aux_model_strong_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(vse.bf, file="aux_model_very_strong_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(de.bf, file="aux_model_decisive_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-```
-```QUESTION: Which are the significant SNPs and to which covariable they are associated? Are some of the significant SNPs associated to more than one covariable?```  
-
-## The AUX Model with Linkage Disequilibrium (LD)
-This model is similar to the AUX model but in case you know the physical order of the SNPs on chromosomes it allows to account for
-spatial dependency among markers (\~linkage disequilibrium) by means of the parameter b_is.
-b_is = 0 implies no spatial dependency and b_is > 0 assumes that the delta_ik with similar values tend to cluster according to the underlying SNP positions (the higher the b_is, the higher the level of
-spatial homogeneity). In practice, b_is = 1 is commonly used and a value of b_is =< 1 is recommended.
-
-To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* To set the value of the  b_is parameter (```-isingbeta```)
-* To specify if you want to scale covariables (```-scalecov```)
-* To specify the model you want to run (```-auxmodel```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile```)
-* A prefix to name the output (```-outprefix```)
-
-Run Baypass with the Aux model (in the BayPass container!):
-```
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates -auxmodel -isingbeta 1.0 -omegafile hgdp_s1_mat_omega.out -outprefix hgdpauxld
-```
-
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
-
-Copy the previously obtained results to the baypass folder:
-
-```bash
-cd ppgdata/ppg_bp_2019/forR/AUX_LD/
-cp *  /ppgdata/baypass/
-
-```
-
-Get the file with the regression coefficients (posterior mean) for each SNP: 
-```R
-covauxisb1.snp.res=read.table("hgdpauxld_summary_betai.out",h=T)
-```
-
-Plot the estimates of the posterior mean of the each auxiliary variable delta_ik under both models (Aux and Aux with LD):
-
-```R
-pdf(file="plot_Aux_ld_model_results_delta.pdf")
-layout(matrix(1:2,2,1))
-plot(covaux.snp.res$M_Delta,xlab="SNP",ylab=expression(delta[i]),main="AUX model")
-plot(covauxisb1.snp.res$M_Delta,xlab="SNP",ylab=expression(delta[i]), main="AUX model with isb=1")
-dev.off()
-```
-* Again, the X axis in the two plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
-
-Plot the resulting estimates of the Bayes Factor, the underlying regression coefficients (posterior mean) and the calibrated XtX:
-
-```R
-pdf(file="plot_Aux_ld_model_results.pdf")
-layout(matrix(1:3,3,1))
-plot(covauxisb1.snp.res$BF.dB., xlab="SNP",ylab="BFmc (in dB)")
-abline(h=10, lty=2, col="green")
-abline(h=15, lty=2, col="blue")
-abline(h=20, lty=2, col="red")
-plot(covauxisb1.snp.res$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS")
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-```
-
-* Again, blue, green and red lines in the BF plot are depicting the thresholds for the SNPs with strong, very strong and decisive evidence of association, respectively.
-* Note that the calibrated XtX values were obtained from the CORE model using PODs.
-* The X axis in the two first plots ranges from 0 to more than 7000 SNPs. This is because you are plotting the 2335 SNPs for each of the three covariables.
-
-Retrieve the SNPs with strong (se), very strong (vse) and decisive evidence (de) of significant association:
-
-```R
-se.bf <- covauxisb1.snp.res[covauxisb1.snp.res$BF.dB. > 10 & covauxisb1.snp.res$BF.dB. < 15, ]
-vse.bf <- covauxisb1.snp.res[covauxisb1.snp.res$BF.dB. > 15 & covauxisb1.snp.res$BF.dB. < 20, ]
-de.bf <- covauxisb1.snp.res[covauxisb1.snp.res$BF.dB. >= 20, ]
-
-write.table(se.bf, file="aux_ld_model_strong_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(vse.bf, file="aux_ld_model_very_strong_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(de.bf, file="aux_ld_model_decisive_evidence_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-```
-
-```QUESTION: Which are the SNPs that are significantly associated? is the number of significant SNPs more or less the same as that obtained under the AUX model?```
-
-# EXTRA EXERCISES
-
-## The STANDARD Model: importance sampling 
+## The STANDARD Model (STDis): importance sampling 
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
 The estimation of the beta regression coefficients for each SNP and covariable is performed using the importance sampling approach.
 
@@ -607,407 +407,343 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 To run this model (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
-* The covariates file (covariates in ppg_bp_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* * The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * To specify if you want to scale covariables (```-scalecov```)
 * A prefix to name the output (```-outprefix```)
 
-Run BayPass with the STANDARD model importance sampling: 
-
-```
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -outprefix hgdpis
-```
-
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
-
-Copy the previously obtained results to the baypass folder:
+1. Run BayPass with the STANDARD model importance sampling by submit the job script "run_stdis_model.sh" with the command sbatch:
 
 ```bash
-cd ppgdata/ppg_bp_2019/forR/STDis/
-cp *  /ppgdata/baypass/
+#!/bin/bash                                                                                                             
 
+# define names                                                                                                          
+#SBATCH --job-name=bp_stdis                                                                                         
+#SBATCH --error bp_stdis-%j.err                                                                                     
+#SBATCH --output bp_stdis-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (STDis Model)
+./g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
 ```
 
-### Pseudo Observed Data (PODs) 
-Here and for a matter of time, we are going to simulate 1,000 PODs (but usually 100000 is recommended). 
-To simulate PODs under the STDis model we need t follow the same procedure as with XtX in the CORE model but adding two extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter of EACH covariable (output resulting from running the STDis model). 
+Copy the previously obtained results to the my_results folder in your personal computer:
 
-Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution for each covariable separately: 
-
-```R
-pi.beta.coefis=read.table("hgdpis_summary_beta_params.out",h=T)$Mean
+```bash
+scp hgdp_stdis_* ./my_results
+cd my_results
 ```
-
-Get estimates (posterior mean) of the correlation parameter (beta) for each covariable separately:
+2. Inspect the obtained results.
 
 ```R
-beta.coefis=read.table("hgdpis_summary_betai_reg.out",h=T)
-beta.coefislat=beta.coefis[beta.coefis$COVARIABLE == 1, ]$Beta_is
-beta.coefislon=beta.coefis[beta.coefis$COVARIABLE == 2, ]$Beta_is 
-beta.coefiseu=beta.coefis[beta.coefis$COVARIABLE == 3, ]$Beta_is
+#Read the file with the BF, the eBPis and the correlation coefficients parameters
+hgdp_stdis.snp.res=read.table("hgdp_stdis_summary_betai_reg.out",h=T)
+
+#Plot BF, the eBPis and the correlation coefficients for the Latitude covariable
+pdf("hgdp_stdis_model_lat.pdf")
+layout(matrix(1:3,3,1))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$BF.dB.,
+	xlab="SNP",ylab="BFis (in dB)")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+	abline(h=10,lty=2, col="green") #strong evidence
+	abline(h=15,lty=2, col="blue")  #very strong evidence
+	abline(h=20,lty=2, col="red")   #decesive evidence
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$eBPis,
+	xlab="SNP",ylab="eBPis")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+	abline(h=3,lty=2, col="red")   #Pval = 0.001
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1] == 1,]$Beta_is,
+	xlab="SNP",ylab=expression(beta~"coefficient"))
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis MODEL: Latitude",side=3,line=- 2,outer=TRUE)
+dev.off()
+
+#Plot BF, the eBPis and the correlation coefficients for the Longitude covariable
+pdf("hgdp_stdis_model_lon.pdf")
+layout(matrix(1:3,3,1))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$BF.dB.,
+	xlab="SNP",ylab="BFis (in dB)")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+	abline(h=10,lty=2, col="green") #strong evidence
+	abline(h=15,lty=2, col="blue")  #very strong evidence
+	abline(h=20,lty=2, col="red")   #decesive evidence
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1] == 2,]$eBPis,
+	xlab="SNP",ylab="eBPis")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+	abline(h=3,lty=2, col="red")   #Pval=0.001
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$Beta_is,
+	xlab="SNP",ylab=expression(beta~"coefficient"))
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis MODEL: Longitude",side=3,line=- 2,outer=TRUE)
+dev.off()
+
+#Plot BF, the eBPis and the correlation coefficients for the European origin covariable
+pdf("hgdp_stdis_model_eu.pdf")
+layout(matrix(1:3,3,1))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$BF.dB.,
+	xlab="SNP",ylab="BFis (in dB)")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+	abline(h=10,lty=2, col="green") #strong evidence
+	abline(h=15,lty=2, col="blue")  #very strong evidence
+	abline(h=20,lty=2, col="red")   #decesive evidence
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$eBPis,
+	xlab="SNP",ylab="eBPis")
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+	abline(h=3,lty=2, col="red")   #Pval=0.001
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$Beta_is,
+xlab="SNP",ylab=expression(beta~"coefficient"))
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis MODEL: European origin",side=3,line=- 2,outer=TRUE)
+dev.off()
 ```
+```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?```
 
-Upload the original data to obtain total allele count (sample size for each population):
+3. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
 
-```R
+3.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" with the command sbatch.
+
+```bash
+#!/bin/bash                                                                                                             
+
+# define names                                                                                                          
+#SBATCH --job-name=bp_10000_sim                                                                                         
+#SBATCH --error bp_10000_sim-%j.err                                                                                     
+#SBATCH --output bp_10000_sim-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
+
+# upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
-```
-Get the omega matrix estimated under the STDis model:
 
-```R
-omega.is=as.matrix(read.table(file="hgdpis_mat_omega.out", header=F))
-```
+# read the omega matrix from seed1 obtained when running the CORE Model:
+omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 
-Get the values for each covariable separately:
-
-```R
-cov=read.table("covariates",h=F)
-cov1=as.numeric(cov[1,])
-cov2=as.numeric(cov[2,])
-cov3=as.numeric(cov[3,])
+# generate 10,000 PODs
+simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
+	sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_10000")
 ```
 
-Generate PODs for each covariable separately:
-```R
-simu.hgdpislat_1000 <- simulate.baypass(omega.mat=omega.is, nsnp=1000, beta.coef=beta.coefislat, beta.pi=pi.beta.coefis, pop.trait=cov1, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsislat_1000")
-
-simu.hgdpislon_1000 <- simulate.baypass(omega.mat=omega.is, nsnp=1000, beta.coef=beta.coefislon, beta.pi=pi.beta.coefis, pop.trait=cov2, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsislon_1000")
-
-simu.hgdpiseu_1000 <- simulate.baypass(omega.mat=omega.is, nsnp=1000, beta.coef=beta.coefiseu, beta.pi=pi.beta.coefis, pop.trait=cov3, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsiseu_1000")
-```
-
-Run again the STDis model with the simulated PODs and for each covariable independently:
-
-```
-g_baypass -npop 52 -gfile G.hgdp_podsislat_1000 -efile covariates_lat -scalecov -outprefix pod_hgdpvislat_1000
-
-g_baypass -npop 52 -gfile G.hgdp_podsislon_1000 -efile covariates_lon -scalecov -outprefix pod_hgdpvislon_1000
-
-g_baypass -npop 52 -gfile G.hgdp_podsiseu_1000 -efile covariates_eu -scalecov -outprefix pod_hgdpviseu_1000
-```
-
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
+3.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch..
 
 ```bash
-cd ppgdata/ppg_bp_2019/forR/PODS/STDis/
-cp *  /ppgdata/baypass/
+#!/bin/bash                                                                                                             
 
+# define names                                                                                                          
+#SBATCH --job-name=bp_stdis_10000_sim                                                                                         
+#SBATCH --error bp_stdis_10000-%j.err                                                                                     
+#SBATCH --output bp_stdis_10000-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (CORE Model) with the 10000 PODs as input
+./g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-* Note that for running the STDis, a file with all the covariables is normally used whereas to run the simulations under the STDis each covariable should be included at time (Number of runs of simulations = Number of covariables). 
+Copy the previously obtained results to the my_results folder in your personal computer:
 
-### XtX, BFis and eBPis calibration  
-
-Get the XtX statistic from PODs (1000 PODs):
-
-```R
-podis.xtx.lat=read.table("pod_hgdpvislat_1000_summary_pi_xtx.out", h=T)$M_XtX
-hgdp.is.snp.res.lat <- read.table("hgdpis_summary_pi_xtx.out", h=T)
-
-podis.xtx.lon=read.table("pod_hgdpvislon_1000_summary_pi_xtx.out", h=T)$M_XtX
-hgdp.is.snp.res.lon <- read.table("hgdpis_summary_pi_xtx.out", h=T)
-
-podis.xtx.eu=read.table("pod_hgdpviseu_1000_summary_pi_xtx.out", h=T)$M_XtX
-hgdp.is.snp.res.eu <- read.table("hgdpis_summary_pi_xtx.out", h=T)
+```bash
+scp *_10000* ./my_results
+cd my_results
 ```
-
-Compute the 1% threshold:
-
-```R
-podis.thresh.lat=quantile(podis.xtx.lat, probs=0.99)
-podis.thresh.lon=quantile(podis.xtx.lon, probs=0.99)
-podis.thresh.eu=quantile(podis.xtx.eu, probs=0.99)
-```
-
-Add the threshold to the actual XtX plot:
+3.3. Sanity check.
 
 ```R
-pdf(file="XtX_calibration_stdis.lat.pdf")
-plot(hgdp.is.snp.res.lat$M_XtX, xlab="SNPs", ylab=" XtX ")
-abline(h=podis.thresh.lat, lty=2, col="red")
+#Read the files resulting from running he CORE Model and from simulating PODs
+#omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
+#pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
+pod.omega_10000=as.matrix(read.table("hgdp_stdis_10000_pods_mat_omega.out"))
+pod.pi.beta.coef_10000=read.table("hgdp_stdis_10000_pods_summary_beta_params.out",h=T)$Mean
+
+#Plot the observed versus the simulated omegas:
+pdf(file="comparison_omega_obs_sim_10000_pods.pdf")
+plot(pod.omega_10000, omega_s1, xlab="Omega from PODs", 
+    ylab="Omega from real data", main="10000 PODs") 
+    abline(a=0,b=1)
 dev.off()
 
-pdf(file="XtX_calibration_stdis.lon.pdf")
-plot(hgdp.is.snp.res.lon$M_XtX, xlab="SNPs", ylab=" XtX ")
-abline(h=podis.thresh.lon, lty=2, col="red")
+#Compute the distance between the observed and simulated omegas
+fmd.dist(pod.omega_10000, omega_s1)
+
+#Plot the observed versus the simulated pi.beta:
+pdf(file="comparison_pi.beta_obs_sim_10000pods.pdf")
+plot(pod.pi.beta.coef_10000, pi.beta.coef, xlab="pi.beta from PODs", 
+    ylab="pi.beta from Data", main="10000 PODs") 
+    abline(a=0,b=1)
 dev.off()
-
-pdf(file="XtX_calibration_stdis.eu.pdf")
-plot(hgdp.is.snp.res.eu$M_XtX, xlab="SNPs", ylab=" XtX ")
-abline(h=podis.thresh.eu, lty=2, col="red")
-dev.off()
 ```
 
-Retrieve the SNPs that are significant (XtX statsitic):
+3.4. Calibrate the BF, the eBPis and the correlation coefficients parameters.
 
 ```R
-snps.sign.xtx.is.lat <- hgdp.is.snp.res.lat[hgdp.is.snp.res.lat$M_XtX >= podis.thresh.lat, ]
-write.table(snps.sign.xtx.is.lat, file="significant_SNPs_XtX.std.is.lat.txt", col.names=T, row.names=F, quote=F, sep="\t")
+#Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
+hgdp_stdis_10000_pods_param=read.table("hgdp_stdis_10000_pods_summary_betai_reg.out",h=T)
 
-snps.sign.xtx.is.lon <- hgdp.is.snp.res.lon[hgdp.is.snp.res.lon$M_XtX >= podis.thresh.lon, ]
-write.table(snps.sign.xtx.is.lon, file="significant_SNPs_XtX.std.is.lon.txt", col.names=T, row.names=F, quote=F, sep="\t")
+### Calibrate the STDis BF for 
+#Read the PODs file to estimate the 1% threshold for the latitude variable
+hgdp_stdis_10000_pods_BF_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$BF.dB.,probs=0.99)
 
-snps.sign.xtx.is.eu <- hgdp.is.snp.res.eu[hgdp.is.snp.res.eu$M_XtX >= podis.thresh.eu, ]
-write.table(snps.sign.xtx.is.eu, file="significant_SNPs_XtX.std.is.eu.txt", col.names=T, row.names=F, quote=F, sep="\t")
-```
+Latitude
+#Compute the 1% threshold of eBPis
+hgdp_stdis_10000_pods_eBPis_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$eBPis,probs=0.99)
+#Compute the 1% right threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh1_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$Beta_is,probs=0.99)
+#Compute the 1% left threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh2_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$Beta_is,probs=0.01)
 
-Get the resulting regression coefficient beta, the Importance Sampling estimates of the Bayes Factor, the empirical Bayesian P-value and the underlying regression coefficient for each covariable:
-
-```R
-covis.snp.res=read.table("hgdpis_summary_betai_reg.out",h=T)
-```
-
-Compute the 1% threshold for BFis and eBPis and for each covariable:
-
-```R
-
-podis.ebp.lat=read.table("pod_hgdpvislat_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebp.lat=quantile(podis.ebp.lat$eBPis, probs=0.99)
-bfis.lat=podis.ebp.lat$BF.dB
-bfis.thresh.lat=quantile(bfis.lat, probs=0.99)
-
-podis.ebp.lon=read.table("pod_hgdpvislon_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebp.lon=quantile(podis.ebp.lon$eBPis, probs=0.99)
-bfis.lon=podis.ebp.lon$BF.dB
-bfis.thresh.lon=quantile(bfis.lon, probs=0.99)
-
-podis.ebp.eu=read.table("pod_hgdpviseu_1000_summary_betai_reg.out",h=T)
-podis.thresh.ebp.eu=quantile(podis.ebp.eu$eBPis, probs=0.99)
-bfis.eu=podis.ebp.eu$BF.dB.
-bfis.thresh.eu=quantile(bfis.eu, probs=0.99)
-```
-
-Plot the resulting Importance Sampling estimates of the Bayes Factor, the empirical Bayesian P-value and the underlying regression coefficient for each covariable:
-
-```R
-pdf(file="plot_stdis_model_results_lat.pdf")
+#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+pdf("stdis_model_calibrated_lat.pdf")
 layout(matrix(1:3,3,1))
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
-abline(h=bfis.thresh.lat, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h=podis.thresh.ebp.lat, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 1, ]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$BF.dB.,
+    ylab="Calibrated BF", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_BF_thresh_lat,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$eBPis,
+    ylab="Calibrated eBPis", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_eBPis_thresh_lat,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$Beta_is,
+    ylab="Calibrated Beta", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh1_lat,lty=2)
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh2_lat,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col = "red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis Model: Latitude",side=3,line=-1.5,outer=TRUE)
 dev.off()
 
-pdf(file="plot_stdis_model_results_lon.pdf")
+### Calibrate the STDis BF for Longitude
+#Read the PODs file to estimate the 1% threshold for the longitude variable
+hgdp_stdis_10000_pods_BF_thresh_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$BF.dB.,probs=0.99)
+#compute the 1% threshold of eBPis
+hgdp_stdis_10000_pods_eBPis_thresh_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$eBPis,probs=0.99)
+#Compute the 1% right threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh1_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$Beta_is,probs=0.99)
+#Compute the 1% left threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh2_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$Beta_is,probs=0.01)
+
+#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+pdf("stdis_model_calibrated_lon.pdf")
 layout(matrix(1:3,3,1))
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 2, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
-abline(h=bfis.thresh.lon, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 2, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h= podis.thresh.ebp.lon, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 2 ,]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$BF.dB.,
+    ylab="Calibrated BF", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_BF_thresh_lon,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$eBPis,
+    ylab="Calibrated eBPis", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_eBPis_thresh_lon,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$Beta_is,
+    ylab="Calibrated Beta", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh1_lon,lty=2)
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh2_lon,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis Model: Longitude",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 
-pdf(file="plot_stdis_model_results_eu.pdf")
+### Calibrate the STDis BF for European origin
+#Read the PODs file to estimate the 1% threshold for the European origin variable
+hgdp_stdis_10000_pods_BF_thresh_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$BF.dB.,probs=0.99)
+#compute the 1% threshold of eBPis
+hgdp_stdis_10000_pods_eBPis_thresh_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$eBPis,probs=0.99)
+#Compute the 1% right threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh1_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$Beta_is,probs=0.99)
+#Compute the 1% left threshold of Beta_is
+hgdp_stdis_10000_pods_Beta_is_thresh2_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$Beta_is,probs=0.01)
+
+#Plot the observer parameters with the new empiral thresholds obtained from the PODs
+pdf("stdis_model_calibrated_eu.pdf")
 layout(matrix(1:3,3,1))
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 3, ]$BF.dB., xlab="SNP",ylab="BFis (in dB)")
-abline(h=bfis.thresh.eu, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 3, ]$eBPis, xlab="SNP",ylab="eBPis")
-abline(h= podis.thresh.ebp.eu, lty=2, col="red")
-plot(covis.snp.res[covis.snp.res$COVARIABLE == 3 ,]$Beta_is, xlab="SNP",ylab=expression(beta~"coefficient"))
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$BF.dB.,
+    ylab="Calibrated BF", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_BF_thresh_eu,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$BF.dB., col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$BF.dB., col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$eBPis,
+    ylab="Calibrated eBPis", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_eBPis_thresh_eu,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$eBPis, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$eBPis, col="red", pch=20)
+
+plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$Beta_is,
+    ylab="Calibrated Beta", xlab="SNP")
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh1_eu,lty=2)
+	abline(h=hgdp_stdis_10000_pods_Beta_is_thresh2_eu,lty=2)
+	points(x=2334, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2334, ]$Beta_is, col="red", pch=20)
+	points(x=2335, y=hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3 & hgdp_stdis.snp.res[,2]==2335, ]$Beta_is, col="red", pch=20)
+	mtext("STDis Model: European Origin",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 ```
+```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?```
 
-Retrieve the SNPs with significant association (BFis, eBP) for each covariable:
+# EXTRA EXERCISES
 
-```R
-bf.is.lat <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lat, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lat, ]$COVARIABLE == 1, ]
-ebp.is.lat <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lat, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lat, ]$COVARIABLE == 1, ]
+## The STDis and CONTRAST Model
+This "combined" analysis allows to evaluate to which extent the population binary covariables are associated to specific marker/SNP using two different approaches: i) running the STDis model and hence, testing are (linearly) associated to each marker/SNP or ii) performing a contrast analysis to compute contrast of standardized allele frequencies between two groups of populations.
 
-bf.is.lon <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lon, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.lon, ]$COVARIABLE == 2, ]
-ebp.is.lon <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lon, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.lon, ]$COVARIABLE == 2, ]
+The contrast anaysis can be if the assumed linear relationship with allele frequencies is not entirely satisfactory 
 
-bf.is.eu <- covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.eu, ][covis.snp.res[covis.snp.res$BF.dB. > bfis.thresh.eu, ]$COVARIABLE == 3, ]
-ebp.is.eu <- covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.eu, ][covis.snp.res[covis.snp.res$eBPis > podis.thresh.ebp.eu, ]$COVARIABLE == 3, ]
+In addition, the association analyses carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
 
-write.table(bf.is.lat, file="std.is_signif_BFis_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebp.is.lat, file="std.is_signif_eBP_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
 
-write.table(bf.is.lon, file="std.is_signif_BFis_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebp.is.lon, file="std.is_signif_eBP_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-
-write.table(bf.is.eu, file="std.is_signif_BFis_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(ebp.is.eu, file="std.is_signif_eBP_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-```
-## The STANDARD Model: mcmc
-This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
-The estimation of the beta regression coefficients for each SNP and covariable is performed using an mcmc approach.
-
-* In this case, the user should provide the omega matrix (e.g., using posterior estimates obtained from the CORE model) and it is recommended to
-consider only one covariable at a time (particularly if some covariables are correlated).
-* Bayes factor mcmc (eBPmcmc) is used to evaluate if a particular SNP is associated with a particular covariable, and as the XtX statistic in the CORE model, they should be calibrated. 
-
-To run this model with allele data you will need:
+To run this analysis (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in PPG_BP_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs “sorted if possible”. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```).
-* The covariates file (covariates in PPG_BP_2019/input_data/): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* To specify the model you want to run (```-covmcmc```)
+* * The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The binary covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* The binary covariates file (covariates in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
 * To specify if you want to scale covariables (```-scalecov```)
-* To provide the omega matrix obtained under the CORE model (```-omegafile```)
 * A prefix to name the output (```-outprefix```)
-
-Run STANDARD model independently with each covariable:
-
-```
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates_lat -covmcmc -scalecov -omegafile hgdp_s1_mat_omega.out -outprefix hgdp_mcmc_lat
-
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates_lon -covmcmc -scalecov -omegafile hgdp_s1_mat_omega.out -outprefix hgdp_mcmc_lon
-
-g_baypass -npop 52 -gfile hgdp.geno -efile covariates_eu -covmcmc -scalecov -omegafile hgdp_s1_mat_omega.out -outprefix hgdp_mcmc_eu
-```
-
-```diff
-- Stop BayPass (Ctrl+C) 
-```
+ 
 
 
-```bash
-cd ppgdata/ppg_bp_2019/forR/STDmcmc/
-cp *  /ppgdata/baypass/
-
-```
-
-### Pseudo Observed Data (PODs) 
-Again, for a matter of time, we are going to simulate 1,000 PODs (but usually 100000 is recommended). 
-To simulate PODS under the STDmcmc we need to follow the same procedure as with XtX in the CORE model but adding two extra parameters: a vector with the values of EACH covariable and a vector with the estimated mean beta parameter for EACH covariable (output resulting from running the STDmcmc model). 
-
-Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
-
-```R
-pi.beta.coefmc.lat=read.table("hgdp_mcmc_lat_summary_beta_params.out", h=T)$Mean
-pi.beta.coefmc.lon=read.table("hgdp_mcmc_lon_summary_beta_params.out", h=T)$Mean
-pi.beta.coefmc.eu=read.table("hgdp_mcmc_eu_summary_beta_params.out", h=T)$Mean
-```
-
-Upload the original data to obtain total allele count (sample size for each population)
-
-```
-hgdp.data<-geno2YN("hgdp.geno")
-```
-
-Get the omega matrix estimated under the CORE model:
-
-```R
-omega.mc.lat=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
-```
-
-Get estimates (posterior mean) of the correlation parameter (beta) for each covariable separately: 
-
-```R
-beta.coefmc.lat=read.table("hgdp_mcmc_lat_summary_betai.out",h=T)$M_Beta
-beta.coefmc.lon=read.table("hgdp_mcmc_lon_summary_betai.out",h=T)$M_Beta
-beta.coefmc.eu=read.table("hgdp_mcmc_eu_summary_betai.out",h=T)$M_Beta
-```
-
-Get the values for each covariable separately:
-
-```R
-cov=read.table("covariates",h=F)
-cov1=as.numeric(cov[1,])
-cov2=as.numeric(cov[2,])
-cov3=as.numeric(cov[3,])
-```
-
-Create the PODs for each covariable separately:
-
-```R
-simu.hgdpmclat_1000 <- simulate.baypass(omega.mat=omega.mc.lat, nsnp=1000, beta.coef=beta.coefmc.lat, beta.pi=pi.beta.coefmc.lat, pop.trait=cov1, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsmclat_1000")
-
-simu.hgdpmclon_1000 <- simulate.baypass(omega.mat=omega.mc.lat, nsnp=1000, beta.coef=beta.coefmc.lon, beta.pi= pi.beta.coefmc.lon, pop.trait=cov2, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsmclon_1000")
-
-simu.hgdpmceu_1000 <- simulate.baypass(omega.mat=omega.mc.lat, nsnp=1000, beta.coef=beta.coefmc.eu, beta.pi= pi.beta.coefmc.eu, pop.trait=cov3, sample.size=hgdp.data$NN, pi.maf=0, suffix="hgdp_podsmceu_1000")
-```
-
-Run again the STDmcmc model with the simulated PODs and for each covariable independently:
-
-```
-g_baypass -npop 52 -gfile G.hgdp_podsmclat_1000 -efile covariates_lat -scalecov -covmcmc -omegafile hgdp_s1_mat_omega.out -outprefix pod_hgdp_mcmc_lat
-
-g_baypass -npop 52 -gfile G.hgdp_podsmclon_1000 -efile covariates_lon -scalecov -covmcmc -omegafile hgdp_s1_mat_omega.out -outprefix pod_hgdp_mcmc_lon
-
-g_baypass -npop 52 -gfile G.hgdp_podsmceu_1000 -efile covariates_eu -scalecov -covmcmc -omegafile hgdp_s1_mat_omega.out -outprefix pod_hgdp_mcmc_eu
-```
-
-```diff
-- Stop BayPass (Ctrl+C) 
-
-```
-
-```bash
-cd ppgdata/ppg_bp_2019/forR/PODS/STDmcmc/
-cp *  /ppgdata/baypass/
-
-```
-
-Get the resulting regression coefficient beta and the Bayes Factor mcmcm (BFmcmc):
-
-```R
-covmcmc.snp.res.lat=read.table("hgdp_mcmc_lat_summary_betai.out",h=T)
-covmcmc.snp.res.lon=read.table("hgdp_mcmc_lon_summary_betai.out",h=T)
-covmcmc.snp.res.eu=read.table("hgdp_mcmc_eu_summary_betai.out",h=T)
-```
-
-Compute the 1% threshold for Bayes Factor mcmcm (BFmcmc) for each covariable:
-
-```R
-podmc.ebp.lat=read.table("pod_hgdp_mcmc_lat_summary_betai.out",h=T)
-podmc.thresh.ebp.lat=quantile(podmc.ebp.lat$eBPmc, probs=0.99)
-
-podmc.ebp.lon=read.table("pod_hgdp_mcmc_lon_summary_betai.out",h=T)
-podmc.thresh.ebp.lon=quantile(podmc.ebp.lon$eBPmc, probs=0.99)
-
-podmc.ebp.eu=read.table("pod_hgdp_mcmc_eu_summary_betai.out",h=T)
-podmc.thresh.ebp.eu=quantile(podmc.ebp.eu$eBPmc, probs=0.99)
-```
-
-Plot the resulting estimates of the empirical Bayesian P-values, the underlying regression coefficients (posterior mean) and the calibrated XtX obtained under the CORE model for each covariable:
-
-```R
-pdf(file="plot_std_mcmc_model_results_lat.pdf")
-layout(matrix(1:3,3,1))
-plot(covmcmc.snp.res.lat$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebp.lat, lty=2, col="red")
-plot(covmcmc.snp.res.lat$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-
-pdf(file="plot_std_mcmc_model_results_lon.pdf")
-layout(matrix(1:3,3,1))
-plot(covmcmc.snp.res.lon$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebp.lon, lty=2, col="red")
-plot(covmcmc.snp.res.lon$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-
-pdf(file="plot_std_mcmc_model_results_eu.pdf")
-layout(matrix(1:3,3,1))
-plot(covmcmc.snp.res.eu$eBPmc, xlab="SNP",ylab="eBPmc")
-abline(h=podmc.thresh.ebp.eu, lty=2, col="red")
-plot(covmcmc.snp.res.eu$M_Beta, xlab="SNP",ylab=expression(beta~"coefficient"))
-plot(hgdp_s1.snp.res$M_XtX, xlab="SNP",ylab="XtX corrected for SMS") 
-abline(h=pod.thresh, lty=2, col="red")
-dev.off()
-```
-
-Retrieve the SNPs with significant association (eBPmc)
-
-```R
-bf.mc.lat <- covmcmc.snp.res.lat[covmcmc.snp.res.lat$eBPmc > podmc.thresh.ebp.lat, ]
-bf.mc.lon <- covmcmc.snp.res.lon[covmcmc.snp.res.lon$eBPmc > podmc.thresh.ebp.lon, ]
-bf.mc.eu <- covmcmc.snp.res.eu[covmcmc.snp.res.eu$eBPmc > podmc.thresh.ebp.eu, ]
-
-write.table(bf.mc.lat, file="std.mcmc_signif_eBPmc_lat_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(bf.mc.lon, file="std.mcmc_signif_eBPmc_lon_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-write.table(bf.mc.eu, file="std.mcmc_signif_eBPmc_eu_SNPs.txt", col.names=T, row.names=F, quote=F, sep= "\t")
-```
 ### BIBLIOGRAPHY
 
 * Gautier M. 2015. Genome-Wide Scan for Adaptive Divergence and Association with Population-Specific Covariates. Genetics 201(4): 1555–1579. 
