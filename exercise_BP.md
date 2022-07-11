@@ -73,7 +73,7 @@ To run this model (using read count data) you will need:
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=../input/hgdp.geno
+INPUT=./input/hgdp.geno
 cd $INPUT
 
 # module load                                                                                                           
@@ -98,7 +98,7 @@ Create a new folder "my_results" in your personal computer and dowload the obtai
 
 ```bash
 mkdir my_results
-scp hgdp_core_s* ./my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICOhgdp_core_s* ./my_results
 cd my_results
 ```
 2. Sanity Check. 
