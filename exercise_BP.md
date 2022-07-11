@@ -9,12 +9,12 @@ These two SNPs have been previously reported to be under positive selection in E
  
 
 ```diff
-- Note that even we are performing the analysis with a very reduce dataset, the time it takes to run each model is above what we have in this practice and therefore we will stop BayPass and use some of the results previously obtained to plot them in R and to run the next models.
+- Note that even we are performing the analysis with a very reduce dataset, the time it takes to run some of the models is above what we have in this practice and therefore, in some cases, we will use some of the results previously obtained to plot them in R and to run the next models.
 
 ```
 
 ## Get data
-The data for this session can be retrieved from google drive [data](https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view)  
+The data for this session can be retrieved from google drive [data]([https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view](https://ubarcelona-my.sharepoint.com/personal/marnedo_ub_edu/_layouts/15/onedrive.aspx?ct=1657525711642&or=OWA%2DNT&cid=ab942ba2%2D05c9%2Db516%2Ddb16%2Dd2076e798b33&ga=1&id=%2Fpersonal%2Fmarnedo%5Fub%5Fedu%2FDocuments%2FTeaching%2F2021%5F22%2FPPG22%2FTeaching%5Fmaterial%2F14jul22)  
    
 Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata).  
 
@@ -24,34 +24,16 @@ Then, go back to the container terminal and type:
 cd ppgdata
 tar -xvzf ppg_bp_2019.tar.gz
 ```
-The folder ppg_bp_2019 has three main subfolders:
+The folder BayPass.SARA_GUIRAO-RICO has three main subfolders:
 
-* input_data: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
+* input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
 * results: previously obtained results for a matter of visualization.   
-* forR: previously obtained results that are necessary to plot some results obtained during this practical class and to execute some of the BayPass models (since we will not have enough time to run everything during the class).  
+* scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
 
-The files in each subfolder are classified according to the model/process (e.g., CORE, AUX,...)
+The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
-Open another terminal window of the same container running the script newshelloncontainer in a new terminal of the host OS: the one (on your left) will be used to run Baypass ("BayPass container") and the other (on your right) to perform analysis and plots in R (just to avoid to upload the R libraries each time). 
-
-Type in the "BayPass" container terminal:
-
-```bash
-cd ppgdata
-mkdir baypass
-
-cd ppgdata/ppg_bp_2019/input_data
-cp * /ppgdata/baypass/
-```
-
-This will copy the input data and the baypass_utils.R script into the folder baypass in which we are going to run baypass
-
-In the "R" container:
-
-```bash
-cd ppgdata
-``
+The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your personal computers.
 
 Start a new R session and upload the R libraries:
 
@@ -66,9 +48,9 @@ Now we are ready to run BayPass:
 The core model allows to perform genome scan for differentiation (covariate free) using the XtX statistics (\~Fst).
 The main advantage of this approach is that explicitly accounts for the covariance structure in population allele frequencies (via estimating) resulting from the demographic history of the populations.
 
-To run this model (using allele data) you will need:
+To run this model (using read count data) you will need:
 * The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in ppg_bp_2019/input_data/): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible). In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
+* The genotype file (hgdp.geno in input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
 * A random number for the seed (in case of needed; ```-seed```)
 * A prefix to name the output (```-outprefix```)
 
