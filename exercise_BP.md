@@ -25,13 +25,11 @@ The folder has two main subfolders:
 * input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
 * scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
-Get also the precomputed results
+Get also the precomputed results (results previously obtained results for a matter of visualization) and download them in your laptop
 
 ```bash
-
-
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
 ```
-* results: previously obtained results for a matter of visualization.
 
 The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
