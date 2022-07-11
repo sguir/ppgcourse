@@ -151,9 +151,7 @@ corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1,
 		tl.cex=0.5)
 dev.off()
 ```
-
 3.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
-
 
 ```R
 #Transform the correlation matrix into a hierarchical clustering tree
@@ -258,7 +256,7 @@ qvals <- qobj$qvalues
 sum(pvals < 0.01)
 sum(qvals < 0.01)
 ```
-
+> * In case the *P*-values of the XtXst do not behave well, you will need to perform "neutral" simulations (Pseudo Observed Data –PODs–).
 
 ### Pseudo Observed Data (PODs) 
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
@@ -266,31 +264,28 @@ PODs are simulated under the inference model (e.g., using posterior estimates of
 overall (across population) SNP allele frequencies).
 Once these PODS are simulated, we need to run again the CORE model to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (calibration process)
 
+> * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
+
+
 Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
 
 ```R
-pi.beta.coef=read.table("hgdp_s1_summary_beta_params.out",h=T)$Mean
-```
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-Upload the original data to obtain total allele count (sample size for each population). 
-Do this by using the geno2YN() function in baypass_utils.R script:
-
-```R
+#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
-```
 
-Read the omega matrix from seed1:
+#Read the omega matrix from seed1 obtained when running the CORE Model:
+omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 
-```R
-omega_s1=as.matrix(read.table(file="hgdp_s1_mat_omega.out", header=F))
-```
+#Simulated 1000 PODs
+simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, 
+    sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
 
-Run **only the first** (simu.hgdp_1000) of the two simulation experiments with different number of replicates (experiment_1=1000 and experiment_2=100000 replicates)  
-* We are not going to run the second one for a matter of time
-```R
-simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
-
-simu.hgdp_100000 <- simulate.baypass(omega.mat=omega_s1, nsnp=100000, sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_100000")
+#Simulated 100000 PODs
+simu.hgdp_100000 <- simulate.baypass(omega.mat=omega_s1, nsnp=100000, 
+    sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_100000") 
 ```
 
 * Note that the G.hgdp_pods_1000 and G.hgdp_pods_100000 files are now the new genotype input files resulting from the simulation process.  
