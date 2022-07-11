@@ -128,12 +128,7 @@ dist.23=fmd.dist(omega_s2, omega_s3)
 ```
 * QUESTION: Are they more or less the same?
 
-
-```diff
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
-
-```
-
 
 Setup the population names for each omega matrix:
 
