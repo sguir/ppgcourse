@@ -14,7 +14,7 @@ These two SNPs have been previously reported to be under positive selection in E
 ```
 
 ## Get data
-The data for this session can be retrieved from google drive [data]([https://drive.google.com/file/d/1seD9x50Gf-j7xH7vd7dKMHZOuWfOfMzt/view](https://ubarcelona-my.sharepoint.com/personal/marnedo_ub_edu/_layouts/15/onedrive.aspx?ct=1657525711642&or=OWA%2DNT&cid=ab942ba2%2D05c9%2Db516%2Ddb16%2Dd2076e798b33&ga=1&id=%2Fpersonal%2Fmarnedo%5Fub%5Fedu%2FDocuments%2FTeaching%2F2021%5F22%2FPPG22%2FTeaching%5Fmaterial%2F14jul22)  
+The data for this session can be retrieved from google drive [data](https://github.com/ppgcourseUB/ppgcourse2022/tree/main/Adaptive_differentiaion%20_and_covariates%20association.SARA_GUIRAO-RICO)  
    
 Download the file "ppg_bp_2019.tar.gz" in the shared folder between the container and the host system (/ppgdata).  
 
