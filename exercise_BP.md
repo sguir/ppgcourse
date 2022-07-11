@@ -33,7 +33,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPas
 
 The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
-The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your personal computers.
+The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your laptop.
 
 Start a new R session and upload the R libraries:
 
@@ -85,7 +85,7 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core
 
 This will generate 7 files for each seed.
 
-Create a new folder "my_results" in your personal computer and dowload the obtained results and the script "baypass_utils.R"
+Create a new folder "my_results" in your laptop and dowload the obtained results and the script "baypass_utils.R"
 
 ```bash
 mkdir my_results
@@ -318,7 +318,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000
 
 > * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
-Copy the previously obtained results and also those precomputed for 100,000 PODs to the my_results folder in your personal computer:
+Copy the previously obtained results and also those precomputed for 100,000 PODs to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/G.hgdp_pods_1000 ./my_results
@@ -428,7 +428,7 @@ module load BayPass
 g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
 ```
 
-Copy the previously obtained results to the my_results folder in your personal computer:
+Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* ./my_results
@@ -565,7 +565,7 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-Copy the previously obtained results to the my_results folder in your personal computer:
+Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* ./my_results
@@ -751,7 +751,7 @@ module load BayPass
 g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
 ````
 
-Copy the previously obtained results to the my_results folder in your personal computer:
+Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_contrast_* ./my_results
@@ -772,11 +772,11 @@ hist(10**(-1*covariates_eu.C2$log10.1.pval.),freq=F,breaks=50,
 	abline(h=1)
 dev.off()
 ```
-```QUESTION: Are the C2 P-values behaving well?```
+```QUESTION: Are the C2 *P*-values behaving well?```
 
 3. Calibrate C2 statistics.
 
-3.1.Simulate 10000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
+3.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
 
 ```bash
 module load r-mvtnorm
@@ -808,7 +808,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 
 ```
 
-3.2. Run the STDis and contrast Models with the 10000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
+3.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -833,7 +833,7 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
 ```
 
-Copy the previously obtained results to the my_results folder in your personal computer:
+Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* *C2_10000* ./my_results
