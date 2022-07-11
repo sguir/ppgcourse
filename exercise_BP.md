@@ -258,7 +258,7 @@ sum(qvals < 0.01)
 ```
 > * In case the *P*-values of the XtXst do not behave well, you will need to perform "neutral" simulations (Pseudo Observed Data –PODs–).
 
-### Pseudo Observed Data (PODs) 
+7. Pseudo Observed Data (PODs) 
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
 PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the
 overall (across population) SNP allele frequencies).
@@ -266,43 +266,69 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 > * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-
-Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution:
+7.1. Simulate 1,000 Pseudo Observed Data (PODs) by submit the job script "run_1000_simulations.sh" with the command sbatch:
 
 ```R
-#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+#!/bin/bash                                                                                                             
+
+# define names                                                                                                          
+#SBATCH --job-name=bp_1000_sim                                                                                         
+#SBATCH --error bp_1000_sim-%j.err                                                                                     
+#SBATCH --output bp_1000_sim-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
+# upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
 
-#Read the omega matrix from seed1 obtained when running the CORE Model:
+# read the omega matrix from seed1 obtained when running the CORE Model:
 omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 
-#Simulated 1000 PODs
+# simulated 1000 PODs
 simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, 
     sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
-
-#Simulated 100000 PODs
-simu.hgdp_100000 <- simulate.baypass(omega.mat=omega_s1, nsnp=100000, 
-    sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_100000") 
 ```
 
-* Note that the G.hgdp_pods_1000 and G.hgdp_pods_100000 files are now the new genotype input files resulting from the simulation process.  
+* The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
 
-Run again the Core model **only with the first simulation experiment** (G.hgdp_pods_1000) (remember, in the BayPass container!)
+7.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with the command sbatch:
 
+```bash
+#!/bin/bash                                                                                                             
+
+# define names                                                                                                          
+#SBATCH --job-name=bp_core_1000_sim                                                                                         
+#SBATCH --error bp_core_1000_sim-%j.err                                                                                     
+#SBATCH --output bp_core_1000_sim-%j.out                                                                                    
+
+# memory and CPUs request                                                                                               
+#SBATCH --mem=6G                                                                                                        
+#SBATCH --cpus-per-task=8 
+
+# directories
+INPUT=../input/hgdp.geno
+cd $INPUT
+
+# module load                                                                                                           
+module load BayPass   
+
+# run BayPass (CORE Model) with the 1000 PODs as input
+./g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
 ```
-g_baypass -npop 52 -gfile G.hgdp_pods_1000 -outprefix hgdp_pod_1000 
 
-g_baypass -npop 52 -gfile G.hgdp_pods_100000 -outprefix hgdp_pod_100000
-
-```
-
-```diff
-- Stop BayPass (Ctrl+C)
-
-```
+> * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
 Copy the previously obtained results to the baypass folder:
 
