@@ -234,6 +234,31 @@ dev.off()
 hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2334, ]$log10.1.pval.
 hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
 ```
+```QUESTION: which XtXst values are significant?```
+
+6. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values.
+
+```R
+#Install the "qvalue" R package
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("qvalue")
+library("qvalue")
+
+#Get the XtXst P-values
+pvals <- 10^(-hgdp_s1.snp.res$log10.1.pval)
+
+#Create a qobj
+qobj <- qvalue(p = pvals)
+
+#Get the qvalues from P-values
+qvals <- qobj$qvalues
+
+#Count and compare how many SNPs are significant without and with correction with alpha = 0.01
+sum(pvals < 0.01)
+sum(qvals < 0.01)
+```
+
 
 ### Pseudo Observed Data (PODs) 
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
