@@ -54,8 +54,7 @@ To run this model (using read count data) you will need:
 * A random number for the seed (in case of needed; ```-seed```)
 * A prefix to name the output (```-outprefix```)
 
-** For running the models with Pool-seq data see the specifications in the [BayPass manual](http://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.1.pdf)
-
+** For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 Run BayPass under the CORE model with three different seeds:
 
 ```
