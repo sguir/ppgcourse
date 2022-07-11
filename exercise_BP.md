@@ -1,4 +1,4 @@
-# Ppgcourse - BayPass
+# PPG_course - BayPass
 
 
 In this practical class we will try to identify human SNPs with evidences of local adaptive diversification and/or significantly associated to geographical variables while taking into account the null correlation of allele frequencies across populations.
@@ -904,7 +904,8 @@ plot(covariates_eu.bf,covariates_eu.C2$log10.1.pval.,
 		y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2335, ]$log10.1.pval., col="red", pch=20)
 dev.off()
 ```
-```QUESTION:  ```
+```QUESTION: How many SNPs are significant before and after calibrating the C2 statistic using PODs? and how many after calibrating the BF?```
+
 ### BIBLIOGRAPHY
 
 * Gautier M. 2015. Genome-Wide Scan for Adaptive Divergence and Association with Population-Specific Covariates. Genetics 201(4): 1555–1579. 
