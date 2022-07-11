@@ -266,26 +266,21 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 > * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-7.1. Simulate 1,000 Pseudo Observed Data (PODs) by submit the job script "run_1000_simulations.sh" with the command sbatch:
+7.1. Simulate 1,000 Pseudo Observed Data (PODs) in the cloud:
 
-```R
-#!/bin/bash                                                                                                             
-
-# define names                                                                                                          
-#SBATCH --job-name=bp_1000_sim                                                                                         
-#SBATCH --error bp_1000_sim-%j.err                                                                                     
-#SBATCH --output bp_1000_sim-%j.out                                                                                    
-
-# memory and CPUs request                                                                                               
-#SBATCH --mem=6G                                                                                                        
-#SBATCH --cpus-per-task=8 
-
+```bash
+module load r-mvtnorm
 # directories
 INPUT=../input/hgdp.geno
 cd $INPUT
 
-# module load                                                                                                           
-module load r-mvtnorm
+#Open R
+R
+
+#Install packages
+install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+require(corrplot); require(ape); require(geigen);require(mvtnorm)
+source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
 # get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
@@ -522,23 +517,18 @@ dev.off()
 3.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" with the command sbatch.
 
 ```bash
-#!/bin/bash                                                                                                             
-
-# define names                                                                                                          
-#SBATCH --job-name=bp_10000_sim                                                                                         
-#SBATCH --error bp_10000_sim-%j.err                                                                                     
-#SBATCH --output bp_10000_sim-%j.out                                                                                    
-
-# memory and CPUs request                                                                                               
-#SBATCH --mem=6G                                                                                                        
-#SBATCH --cpus-per-task=8 
-
+module load r-mvtnorm
 # directories
 INPUT=../input/hgdp.geno
 cd $INPUT
 
-# module load                                                                                                           
-module load r-mvtnorm
+#Open R
+R
+
+#Install packages
+#install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+require(corrplot); require(ape); require(geigen);require(mvtnorm)
+source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
 # get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
@@ -794,23 +784,18 @@ dev.off()
 3.1.Simulate 10000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
 
 ```bash
-#!/bin/bash                                                                                                             
-
-# define names                                                                                                          
-#SBATCH --job-name=bp_10000_c2_sim                                                                                         
-#SBATCH --error bp_10000_c2_sim-%j.err                                                                                     
-#SBATCH --output bp_10000_c2_sim-%j.out                                                                                    
-
-# memory and CPUs request                                                                                               
-#SBATCH --mem=6G                                                                                                        
-#SBATCH --cpus-per-task=8 
-
+module load r-mvtnorm
 # directories
 INPUT=../input/hgdp.geno
 cd $INPUT
 
-# module load                                                                                                           
-module load r-mvtnorm  
+#Open R
+R
+
+#Install packages
+#install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+require(corrplot); require(ape); require(geigen);require(mvtnorm)
+source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
 # get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution
 c2.pi.beta.coef=read.table("hgdp_contrast_summary_beta_params.out",h=T)$Mean
