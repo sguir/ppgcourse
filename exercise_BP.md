@@ -13,11 +13,11 @@ These **two SNPs** have been previously reported to be **under positive selectio
 ```
 
 ## Working space
-We are going to work with three different consoles/terminals:
+We are going to work with **three different consoles/terminals**:
 
-	1. To run BayPass Models (sbatch command) and Simulations (R) in the cluster.
-	2. To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
-	3. To download and copy some precomputed results ("results" folder) to "my_folder". 
+* To run BayPass Models (sbatch command) and Simulations (R) in the cluster.
+* To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
+* To download and copy some precomputed results ("results" folder) to "my_folder". 
 
 ## Get data
 1. The data for this session can be retrieved:  
