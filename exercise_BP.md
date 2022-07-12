@@ -107,7 +107,7 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core
 > * It takes ~ 6 mins each one
 > * This will generate 7 files for each seed.
 
-2. Download the obtained results in my_folder in your laptop
+2. Download the obtained results in **my_folder in your laptop**
 
 ```bash
 #Go to my_results folder
@@ -117,7 +117,8 @@ cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
 ```
 3. Sanity Check. 
-3.1. **In the R session** that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+3.1. **In the R session** that you opened before, compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model .
+.
 
 ```R
 #Read omegas obtained from reunning the core model wth three different seeds
@@ -146,7 +147,7 @@ dist.23
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
-4. Visualization of the shared history of populations.
+4. Visualization of the shared history of populations (**R in your laptop**).
 
 4.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().
 
@@ -189,7 +190,7 @@ heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
 	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
-4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
+4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis (**R in your laptop**).
 
 ```R
 pdf(file="omega_PCA-like.pdf")
@@ -200,7 +201,7 @@ dev.off()
 ```
 > * If you want to modify the size of the text you should modify the baypass_utils.R
 
-5. Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
+5. Explore the values of the XtX statistic (~Fst) obtained under the CORE model (**R in your laptop**).
 
 ```R
 #Read the XtX file (here only for seed1):
@@ -216,7 +217,7 @@ dev.off()
 ```
 ```QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?```
 
-6. Check behavior of the *P*-values associated to the XtXst estimator.
+6. Check behavior of the *P*-values associated to the XtXst estimator (**R in your laptop**).
 
 ```R
 pdf("omega_XtXst_pvals_hist.pdf")
@@ -250,7 +251,7 @@ hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
 ```
 ```QUESTION: which XtXst values are significant?```
 
-7. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values.
+7. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values (**R in your laptop**).
 
 ```R
 #Install the "qvalue" R package
@@ -320,7 +321,7 @@ q()
 
 > *  The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
 
-8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with **the sbatch command**:
+8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with **sbatch command**:
 
 ```bash
 #In the scripts	subfolder
@@ -353,7 +354,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000
 
 > * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
-8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results*** folder in your laptop:
+8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
@@ -366,7 +367,8 @@ scp ../results/CORE_Model/simulations/100000/*_100000* .
 cd my_results
 ```
   
-	8.3. Sanity Check.
+8.3. Sanity Check (**R in your laptop**).
+
 
 Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
@@ -473,14 +475,16 @@ module load BayPass
 # run BayPass (STDis Model)
 g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
 ```
+> * this generates 9 output files.
+> * It takes ~ 6 mins.
 
-2. Copy the previously obtained results to the my_results folder in your laptop:
+2. Copy the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
-scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* ./my_results
 cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* .
 ```
-3. Inspect the obtained results.
+3. Inspect the obtained results (**R in your laptop**).
 
 ```R
 #Read the file with the BF, the eBPis and the correlation coefficients parameters
@@ -556,18 +560,19 @@ dev.off()
 
 4. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
 
-	4.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" with the command sbatch.
+4.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" **in the cluster**.
 
 ```bash
 module load r-mvtnorm
+
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 #Start a new R session
 R
 
-#Install packages
+#Install and load packages
 #install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
@@ -584,9 +589,18 @@ omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 # generate 10,000 PODs
 simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 	sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_10000")
+	
+# close R session
+q()
 ```
 
-	4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch.
+4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the **sbatch command**.
+
+```bash
+#In the scripts subfoder
+sbatch run_stdis_10000_simulations.sh
+```
+> * This is the code to run the "run_stdis_10000_simulations.sh" script:
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -601,7 +615,7 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 # module load                                                                                                           
@@ -611,13 +625,14 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-	4.3. Copy the previously obtained results to the my_results folder in your laptop:
+4.3. Copy the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
-scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* ./my_results
 cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* .
 ```
-	4.4. Sanity check.
+
+4.4. Sanity check (**R in your laptop**).
 
 ```R
 #Read the files resulting from running he CORE Model and from simulating PODs
