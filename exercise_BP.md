@@ -17,7 +17,7 @@ We are going to work with **three different consoles/terminals**:
 
 * To run BayPass Models (sbatch command) and Simulations (R) in the cluster.
 * To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
-* To download and copy some precomputed results ("results" folder) to "my_folder". 
+* To download and copy some precomputed results ("results" folder) to a new created folder "my_folder". 
 
 ## Get data
 1. retrieve the **input data** and the **scripts** for this session:  
