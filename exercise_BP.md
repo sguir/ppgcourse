@@ -74,10 +74,7 @@ To run this model (using read count data) you will need:
 1. Run BayPass under the CORE model with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the **sbatch command**:
 
 ```bash
-#Go to the scripts subfolder
-cd Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/scripts
-
-#Run the CORE Model
+#Run the CORE Model from the scripts subfolder
 sbatch  run_core_model_seed1.sh
 sbatch  run_core_model_seed2.sh
 sbatch  run_core_model_seed3.sh
@@ -116,11 +113,10 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core
 cd my_results
 
 #Copy the CORE Model results
-scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
-s
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
 ```
 3. Sanity Check. 
-	3.1. **In the R session** that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+3.1. **In the R session** that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
 #Read omegas obtained from reunning the core model wth three different seeds
@@ -135,7 +131,8 @@ dev.off()
 ```
 ```QUESTION: Are they similar?```
 
-	3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
+3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
+
 ```R
 dist.12=fmd.dist(omega_s1, omega_s2)
 dist.13=fmd.dist(omega_s1, omega_s3)
@@ -150,7 +147,8 @@ dist.23
 
 4. Visualization of the shared history of populations.
 
-	4.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
+4.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().
+
 ```R
 #Setup the population names for each omega matrix:
 pop.names=c("Papuan","Melanesian","Surui","Pima","Maya","Karitiana","Columbian","Yi","Yaku","Xibo","Uygur","Tujia","Tu","She","Orogen","Naxi","Mongolia","Miao","Lahu","Japanese","Hezhen","Han","Daur",
@@ -168,7 +166,7 @@ corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1,
 		tl.cex=0.5)
 dev.off()
 ```
-	4.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
+4.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
 
 ```R
 #Transform the correlation matrix into a hierarchical clustering tree
@@ -181,7 +179,7 @@ plot(hgdp.tree_s1, type="p",
 	cex=0.5)
 dev.off()
 ```
-	4.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
+4.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
 
 ```R
 pdf(file="omega_heatmap.pdf")
@@ -190,7 +188,7 @@ heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
 	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
-	4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
+4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
 
 ```R
 pdf(file="omega_PCA-like.pdf")
@@ -242,7 +240,7 @@ dev.off()
 ```
 ```QUESTION: Where are the two putative outliers (red points)?```
 
-	6.1. Inspect the *P*-values associated two the two putative outliers.
+6.1. Inspect the *P*-values associated two the two putative outliers.
 
 ```R
 #Inspect the P-values associated two the two putative outliers
@@ -284,9 +282,10 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 > * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-	8.1. Simulate 1,000 Pseudo Observed Data (PODs) **in the cluster**:
+8.1. Simulate 1,000 Pseudo Observed Data (PODs) **in the cluster**:
 
 ```bash
+#In the scripts subfoder
 module load r-mvtnorm
 
 # directories
@@ -320,10 +319,10 @@ q()
 
 > *  The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
 
-	8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with the command sbatch:
+8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with **the sbatch command**:
 
 ```bash
-cd ../scripts	
+#In the scripts	subfolder
 sbatch run_core_1000_simulations.sh 
 ```
 > * this is the code for the run_core_1000_simulations.sh script
@@ -353,14 +352,16 @@ g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000
 
 > * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
-Copy the previously obtained results and also those precomputed for 100,000 PODs to the my_results folder in your laptop:
+8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results*** folder in your laptop:
 
 ```bash
-scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/G.hgdp_pods_1000 ./my_results
+cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/G.hgdp_pods_1000 .
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_pod_1000_* .
 
-scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_pod_1000_* ./my_results
-
-scp ./results/CORE_Model/simulations/100000/*_100000* ./my_results
+#In your laptop
+cd my_results
+scp ../results/CORE_Model/simulations/100000/*_100000* .
 cd my_results
 ```
   
@@ -382,6 +383,9 @@ dev.off()
 
 #Compute the distance between the observed and simulated omegas
 fmd.dist(pod.omega_1000, omega_s1)
+
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
 #Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the PODs:
 pod.pi.beta.coef_1000=read.table("hgdp_pod_1000_summary_beta_params.out",h=T)$Mean
@@ -417,6 +421,8 @@ plot(pod.pi.beta.coef_100000, pi.beta.coef, xlab="pi.beta from PODs",
 	abline(a=0,b=1)
 dev.off()
 ```
+```QUESTION: Are the Omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?```
+
 ```QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?```
     
 ## The STANDARD Model (STDis): importance sampling 
@@ -431,12 +437,16 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 To run this model (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
-* * The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
 * The covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * To specify if you want to scale covariables (```-scalecov```)
 * A prefix to name the output (```-outprefix```)
 
-1. Run BayPass with the STANDARD model importance sampling by submit the job script "run_stdis_model.sh" with the command sbatch:
+1. Run BayPass with the STANDARD model importance sampling by submit the job script "run_stdis_model.sh" with **the sbatch command**:
+
+```bash
+#In the scripts subfolder
+
 
 ```bash
 #!/bin/bash                                                                                                             
