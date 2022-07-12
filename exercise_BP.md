@@ -42,7 +42,7 @@ require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("baypass_utils.R")
 ```
 
-Now we are ready to run BayPass:
+Now we are ready to run BayPass.
 
 ## The CORE Model
 The core model allows to perform genome scan for differentiation (covariate free) using the XtX statistics (\~Fst).
@@ -54,7 +54,7 @@ To run this model (using read count data) you will need:
 * A random number for the seed (in case of needed; ```-seed```)
 * A prefix to name the output (```-outprefix```)
 
-** For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
+> *  For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
 1. Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
 
@@ -83,17 +83,17 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 26847 -outprefix hgdp_core
 g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core_s3
 ```
 
-This will generate 7 files for each seed.
+> * This will generate 7 files for each seed.
 
-Create a new folder "my_results" in your laptop and dowload the obtained results and the script "baypass_utils.R"
+2. Create a new folder "my_results" in your laptop and dowload the obtained results and the script "baypass_utils.R"
 
 ```bash
 mkdir my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* ./my_results
 cd my_results
 ```
-2. Sanity Check. 
-2.1. Install R packages and compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+3. Sanity Check. 
+	3.1. Install R packages and compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
 #Install four R packages
@@ -111,7 +111,7 @@ pdf(file="omega_s1_s2_comparison.pdf")
 	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
 dev.off()
 ```
-2.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
+	3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
 
 ```R
 dist.12=fmd.dist(omega_s1, omega_s2)
@@ -122,9 +122,9 @@ dist.23=fmd.dist(omega_s2, omega_s3)
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
-3. Visualization of the shared history of populations.
+4. Visualization of the shared history of populations.
 
-3.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
+	4.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().  
 ```R
 #Setup the population names for each omega matrix:
 pop.names=c("Papuan","Melanesian","Surui","Pima","Maya","Karitiana","Columbian","Yi","Yaku","Xibo","Uygur","Tujia","Tu","She","Orogen","Naxi","Mongolia","Miao","Lahu","Japanese","Hezhen","Han","Daur",
@@ -142,7 +142,7 @@ corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1,
 		tl.cex=0.5)
 dev.off()
 ```
-3.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
+	4.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
 
 ```R
 #Transform the correlation matrix into a hierarchical clustering tree
@@ -155,7 +155,7 @@ plot(hgdp.tree_s1, type="p",
 	cex=0.5)
 dev.off()
 ```
-3.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
+	4.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
 
 ```R
 pdf(file="omega_heatmap.pdf")
@@ -164,7 +164,7 @@ heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
 	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
-3.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
+	4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis.
 
 ```R
 pdf(file="omega_PCA-like.pdf")
@@ -175,7 +175,7 @@ dev.off()
 ```
 > * If you want to modify the size of the text you should modify the baypass_utils.R
 
-4. Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
+5. Explore the values of the XtX statistic (~Fst) obtained under the CORE model.
 
 ```R
 #Read the XtX file (here only for seed1):
@@ -191,7 +191,7 @@ dev.off()
 ```
 ```QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?```
 
-5. Check behavior of the *P*-values associated to the XtXst estimator.
+6. Check behavior of the *P*-values associated to the XtXst estimator.
 
 ```R
 pdf("omega_XtXst_pvals_hist.pdf")
@@ -216,7 +216,7 @@ dev.off()
 ```
 ```QUESTION: Where are the two putative outliers (red points)?```
 
-5.1. Inspect the *P*-values associated two the two putative outliers.
+	6.1. Inspect the *P*-values associated two the two putative outliers.
 
 ```R
 #Inspect the P-values associated two the two putative outliers
@@ -225,7 +225,7 @@ hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
 ```
 ```QUESTION: which XtXst values are significant?```
 
-6. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values.
+7. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values.
 
 ```R
 #Install the "qvalue" R package
@@ -249,7 +249,7 @@ sum(qvals < 0.01)
 ```
 > * In case the *P*-values of the XtXst do not behave well, you will need to perform "neutral" simulations (Pseudo Observed Data –PODs–).
 
-7. Pseudo Observed Data (PODs) 
+8. Pseudo Observed Data (PODs) 
 
 Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
 PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the
@@ -258,7 +258,7 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 > * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-7.1. Simulate 1,000 Pseudo Observed Data (PODs) in the cloud:
+	8.1. Simulate 1,000 Pseudo Observed Data (PODs) in the cloud:
 
 ```bash
 module load r-mvtnorm
@@ -289,9 +289,9 @@ simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000,
     sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
 ```
 
-* The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
+> *  The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
 
-7.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with the command sbatch:
+	8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with the command sbatch:
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -329,7 +329,7 @@ scp ./results/CORE_Model/simulations/100000/*_100000* ./my_results
 cd my_results
 ```
   
-7.2. Sanity Check.
+	8.3. Sanity Check.
 
 Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
@@ -571,7 +571,7 @@ Copy the previously obtained results to the my_results folder in your laptop:
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* ./my_results
 cd my_results
 ```
-3.3. Sanity check.
+	3.3. Sanity check.
 
 ```R
 #Read the files resulting from running he CORE Model and from simulating PODs
@@ -598,7 +598,7 @@ plot(pod.pi.beta.coef_10000, pi.beta.coef, xlab="pi.beta from PODs",
 dev.off()
 ```
 
-3.4. Calibrate the BF, the eBPis and the correlation coefficients parameters.
+	3.4. Calibrate the BF, the eBPis and the correlation coefficients parameters.
 
 ```R
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
