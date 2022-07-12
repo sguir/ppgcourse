@@ -36,7 +36,7 @@ scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/Bay
 
 * The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and for each in turn, in simulations or plot subfolders.
 
-3. **Create a new folder in your laptop** called **"my_results"** and download there the script **baypass_utils.R** that comes with the BayPass software
+3. **Create a new folder in your laptop** called **"my_results"** and download there the script **baypass_utils.R** that it is provided in the BayPass package.
 
 ```bash
 mkdir my_results
@@ -73,7 +73,7 @@ To run this model (using read count data) you will need:
 
 > *  For more specifications see [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-1. Run BayPass under the **CORE model** with **three different seeds** by submit the jobs' scripts "run_core_model_seed1.sh", "run_core_model_seed2.sh" and "run_core_model_seed3.sh" using the **sbatch command**:
+1. Run BayPass under the **CORE Model** with **three different seeds** by submit the jobs' scripts "run_core_model_seed1.sh", "run_core_model_seed2.sh" and "run_core_model_seed3.sh" using the **sbatch command**:
 
 ```bash
 #Run the CORE Model from the scripts subfolder
@@ -120,10 +120,10 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 ```
 3. **Sanity Check**. 
 
-3.1. **In the R session** that you started before, **compare the omega matrices** obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+3.1. **In the R session** that you started before, **compare the omega matrices** obtained under the CORE Model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
-#Read omegas obtained from running the CORE model with three different seeds
+#Read omegas obtained from running the CORE Model with three different seeds
 omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 omega_s2=as.matrix(read.table(file="hgdp_core_s2_mat_omega.out", header=F))
 omega_s3=as.matrix(read.table(file="hgdp_core_s3_mat_omega.out", header=F))
@@ -207,7 +207,7 @@ dev.off()
 ```
 > * If you want to modify the size of the text you should modify the baypass_utils.R script
 
-5. Explore the values of the **XtXst statistic** (~Fst) obtained under the CORE model (**R in your laptop**).
+5. Explore the values of the **XtXst statistic** (~Fst) obtained under the CORE Model (**R in your laptop**).
 
 ```R
 #Read the XtX file:
@@ -291,7 +291,7 @@ sum(qvals < 0.001)
 
 Here, we are going to **simulate data (PODs)** using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
 PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the overall (across population) SNP allele frequencies).
-Once these PODS are simulated, we need to **run again the CORE model with the PODs as input** to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (**calibration process**)
+Once these PODS are simulated, we need to **run again the CORE Model with the PODs as input** to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (**calibration process**)
 
 > * We want to perform **two different sets of simulations** to inspect how many simulations are needed to retrieve the estimated demographic history: i) **simulating 1,000 PODs**; ii) simulating **100,000 PODs**. :warning: However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed files with the 100,000 simulations.
 
@@ -304,7 +304,7 @@ Once these PODS are simulated, we need to **run again the CORE model with the PO
 Then you can load the packages after installing	
 		
 ```bash
-#In the scripts subfoder
+#In the scripts subfolder
 module load r-mvtnorm
 
 # directories
@@ -314,7 +314,7 @@ cd $INPUT
 #Start a new R session
 R
 
-#Install and load packages
+#Install packages
 install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
 
 #Load the packages
@@ -340,7 +340,7 @@ q()
 
 > * The G.hgdp_pods_1000 file is now the new genotype input file resulting from the simulation process.  
 
-8.2. **Run again, the CORE model** only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" using the **sbatch command**:
+8.2. **Run again, the CORE Model** only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" using the **sbatch command**:
 
 ```bash
 #In the scripts	subfolder
@@ -371,9 +371,9 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
 ```
 
-:warning: For the second set of simulations, we are going to **use the precomputed files** resulting from running the CORE model with the 100,000 simulations as input.
+:warning: For the second set of simulations, we are going to **use the precomputed files** resulting from running the CORE Model with the 100,000 simulations as input.
 
-8.3. **Copy** the previously obtained results and also those precomputed for 100,000 PODs to the **my_results** folder in **your laptop**:
+8.3. **Copy** the previously obtained results and also those precomputed for 100,000 PODs to the folder **my_results** in **your laptop**:
 
 ```bash
 cd my_results
@@ -441,10 +441,10 @@ plot(pod.pi.beta.coef_100000, pi.beta.coef, xlab="pi.beta from PODs",
 dev.off()
 ```
 ```diff
-- QUESTION: Are the Omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?
+- QUESTION: Are the omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?
 ```
 ```diff
-- QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?
+- QUESTION: Where are the dots are falling in both sets of similations? What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?
 ```
     
 ## The STANDARD Model (STDis): importance sampling 
@@ -454,7 +454,7 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 * Remember that this model is **recommended when the number of populations is small (e.g.,  8**) and/or **when populations are highly differentiated**.
 * The importance sampling algorithm relies on approximations to estimate the regression coefficients (do not sample them from the posterior distribution and hence, **the model should be run 3-5 times with different seeds** to check consistency across runs). 
 * The **median of the parameter of insterest** (e.g., beta) among runs can be taken as the estimate (beta) of the parameter.
-* Bayes factor importance sampling (BFis) and the approximated Bayesian *P*-value (eBPis) are used to evaluate if a particular SNP is associated with a particular covariable and, as the XtX statistic in the CORE model, they should be calibrated. 
+* Bayes factor importance sampling (BFis) and the approximated Bayesian *P*-value (eBPis) are used to evaluate if a particular SNP is associated with a particular covariable and, as the XtX statistic in the CORE Model, they should be calibrated. 
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
 To run this model (with read count data) you will need:
@@ -497,7 +497,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -out
 > * This generates 9 output files.
 > * It takes ~ 6 mins.
 
-2. **Copy** the previously obtained results to the **my_results** folder in **your laptop**:
+2. **Copy** the previously obtained results to the folder **my_results** in **your laptop**:
 
 ```bash
 cd my_results
@@ -617,11 +617,12 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 q()
 ```
 ⚠️ We are not running the part between the two :no_entry: symbols for a matter of time ( it takes about ~ 25 mins). Instead, we are going to use the precomputed files in the results folder
+
 4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" using the **sbatch command**.
 
 :no_entry:
 ```bash
-#In the scripts subfoder
+#In the scripts subfolder
 sbatch run_stdis_10000_simulations.sh
 ```
 > * This is the code to run the "run_stdis_10000_simulations.sh" script:
@@ -649,7 +650,7 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-4.3. Copy the previously obtained results to the **my_results** folder in **your laptop**:
+4.3. **Copy** the previously obtained results to the **my_results** folder in **your laptop**:
 
 ```bash
 cd my_results
@@ -657,7 +658,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 ```
 :no_entry:
 
-4.3. **Copy** the precomputed results to the **my_results** folder in **your laptop**:
+4.3. **Copy** the precomputed results to the folder **my_results** in **your laptop**:
 
 ```bash
 cd my_results
@@ -697,7 +698,7 @@ dev.off()
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
 hgdp_stdis_10000_pods_param=read.table("hgdp_stdis_10000_pods_summary_betai_reg.out",h=T)
  
-### Calibrate the STDis BF for Latitude
+### Calibrate the STDis parameters for Latitude
 #Compute the 1% threshold of BF
 hgdp_stdis_10000_pods_BF_thresh_lat=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==1,]$BF.dB.,probs=0.99)
 #Compute the 1% threshold of eBPis
@@ -731,7 +732,7 @@ plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==1,]$Beta_is,
 	mtext("STDis Model: Latitude",side=3,line=-1.5,outer=TRUE)
 dev.off()
 
-### Calibrate the STDis BF for Longitude
+### Calibrate the STDis parameters for Longitude
 #Compute the 1% threshold of BF
 hgdp_stdis_10000_pods_BF_thresh_lon=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==2,]$BF.dB.,probs=0.99)
 #Compute the 1% threshold of eBPis
@@ -765,7 +766,7 @@ plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==2,]$Beta_is,
 	mtext("STDis Model: Longitude",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 
-### Calibrate the STDis BF for European origin
+### Calibrate the STDis parameters for European origin
 #Compute the 1% threshold of BF
 hgdp_stdis_10000_pods_BF_thresh_eu=quantile(hgdp_stdis_10000_pods_param[hgdp_stdis_10000_pods_param[, 1]==3,]$BF.dB.,probs=0.99)
 #Compute the 1% threshold of eBPis
@@ -807,11 +808,11 @@ dev.off()
 # EXTRA EXERCISES
 
 ## The STDis Model and CONTRAST Analysis
-This **"combined" analysis** allows to evaluate to which extent the **population binary covariables are associated to specific markers/SNPs** using two different approaches: i) running the **STDis model** and hence, testing if covariates are (linearly) associated to each marker/SNP or ii) performing a **contrast analysis** to compute contrast of standardized allele frequencies between two groups of populations.
+This **"combined" analysis** allows to evaluate to which extent the **population binary covariables are associated to specific markers/SNPs** using two different approaches: i) running the **STDis Model** and hence, testing if covariates are (linearly) associated to each marker/SNP or ii) performing a **contrast analysis** to compute contrast of standardized allele frequencies between two groups of populations.
 
 * The contrast anaysis can be interesting if the assumed linear relationship between the covariates and allele frequencies is not entirely satisfactory. 
 
-* The association analyses (STDis, STDmcmc, AUX Model) carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
+* The association analyses (STDis, STDmcmc and AUX Models) carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
 
 * Remember all the recomendations described above for running the STDis Model
 
@@ -857,7 +858,7 @@ g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariate
 > * It generates 9 output files.
 > * It takes about 6 mins.
 
-2. **Copy** the previously obtained results to the **my_results** folder in **your laptop**:
+2. **Copy** the previously obtained results to the folder **my_results** in **your laptop**:
 
 ```bash
 cd my_results
@@ -957,7 +958,7 @@ g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efil
 > * It generates 9 output files
 > * It takes about 20 mins
 
-4.3. **Copy** the previously obtained results to the **my_results** folder in **your laptop**.
+4.3. **Copy** the previously obtained results to the folder **my_results** in **your laptop**.
 
 ```bash
 cd my_results
