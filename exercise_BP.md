@@ -67,7 +67,7 @@ The main advantage of this approach is that explicitly **accounts for the covari
 
 To run this model (using read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno in input folder): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads for the reference variant and the other for the number of reads for the alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads for the reference variant and the other for the number of reads for the alternative variant (```-gfile```). 
 * A random number for the **seed** (in case of needed; ```-seed```)
 * A **prefix to name the output** (```-outprefix```)
 
