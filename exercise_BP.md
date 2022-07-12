@@ -67,7 +67,7 @@ The main advantage of this approach is that explicitly **accounts for the covari
 
 To run this model (using read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads for the reference variant and the other for the number of reads for the alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads for the reference variant and the other for the number of reads for the alternative variant (```-gfile```). 
 * A random number for the **seed** (in case of needed; ```-seed```)
 * A **prefix to name the output** (```-outprefix```)
 
@@ -459,7 +459,7 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 To run this model (with read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno in the input folder): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
 * The **covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * To specify if you want to **scale** covariables (```-scalecov```)
 * **A prefix to name the output** (```-outprefix```)
@@ -817,9 +817,9 @@ This **"combined" analysis** allows to evaluate to which extent the **population
 
 To run this analysis (with read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno in the input folder): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
-* The **binary covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* The **binary covariates file** (covariates in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
+* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **binary covariates file** (covariates_eu in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* The **binary covariates file** (covariates_eu in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
 * To specify if you want to **scale covariables** (```-scalecov```)
 * A **prefix to name the output** (```-outprefix```)
  
