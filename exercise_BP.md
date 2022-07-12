@@ -20,10 +20,10 @@ These two SNPs have been previously reported to be under positive selection in E
 svn export https://github.com/ppgcourseUB/ppgcourse2022/tree/main/Adaptive_differentiaion%20_and_covariates%20association.SARA_GUIRAO-RICO
 ```
 
-The folder has two main subfolders:
+* The folder has two main subfolders:
 
-* input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
-* scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
+	*  input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
+	*  scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
 2. Get also the precomputed results (results previously obtained results for a matter of visualization) and download them in your laptop
 
@@ -31,9 +31,9 @@ The folder has two main subfolders:
 scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
 ```
 
-The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
+* The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
-The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your laptop.
+:warning: The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your laptop.
 
 3. Start a new R session and upload the R libraries:
 
