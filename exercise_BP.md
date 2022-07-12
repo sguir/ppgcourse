@@ -47,7 +47,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPas
 4. Start a **new R session** and **install** and **upload** the **R libraries**
 
 ```R
-#Go to the new created folder in your laptop
+#Go to the new created folder
 cd ./my_results
 
 #Start a new R session
