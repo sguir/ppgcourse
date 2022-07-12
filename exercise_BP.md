@@ -31,13 +31,24 @@ svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_different
 scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
 ```
 
+3. Crate a new folder in your laptop and download there the script baypass_utils.R that comes with the BayPass software
+
+```bash
+mkdir my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/baypass_utils.R ./my_results
+```
+
 * The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
 
 :warning: The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your laptop.
 
-3. Start a new R session and upload the R libraries:
+4. Start a new R session and install and upload the R libraries
 
 ```R
+cd ./my_results
+
+#Install four R packages
+install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("baypass_utils.R")
 ```
@@ -56,51 +67,51 @@ To run this model (using read count data) you will need:
 
 > *  For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-1. Run BayPass under the CORE model with three different seeds by submit the job script "run_core_model.sh" with the command sbatch:
+1. Run BayPass under the CORE model with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the sbatch command:
 
+```bash
+cd Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/scripts
+sbatch  run_core_model_seed1.sh
+sbatch  run_core_model_seed2.sh
+sbatch  run_core_model_seed3.sh
+```
+> * This is the code for run_core_model_seed1.sh:
 ```
 #!/bin/bash                                                                                                             
 
 # define names                                                                                                          
-#SBATCH --job-name=bp_core                                                                                         
-#SBATCH --error bp_core-%j.err                                                                                     
-#SBATCH --output bp_core-%j.out                                                                                    
+#SBATCH --job-name=bp_core_seed1                                                                                         
+#SBATCH --error bp_core_seed1-%j.err                                                                                     
+#SBATCH --output bp_core_seed1-%j.out                                                                                    
 
 # memory and CPUs request                                                                                               
 #SBATCH --mem=6G                                                                                                        
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 # module load                                                                                                           
 module load BayPass   
 
-# run BayPass (CORE Model) with different seeds
+# run BayPass (CORE Model) with seed1
 g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core_s1
-g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 26847 -outprefix hgdp_core_s2
-g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 94875 -outprefix hgdp_core_s3
 ```
-
+> * To check if it is runnig type: squeue -u username
+> * It takes ~ 6 mins each one
 > * This will generate 7 files for each seed.
 
-2. Create a new folder "my_results" in your laptop and dowload the obtained results and the script "baypass_utils.R"
+2. Download the obtained results in my_folder in your laptop
 
 ```bash
-mkdir my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* ./my_results
 cd my_results
 ```
 3. Sanity Check. 
-	3.1. Install R packages and compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+	3.1. In the R session that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
-#Install four R packages
-install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
-require(corrplot); require(ape); require(geigen);require(mvtnorm)
-source("baypass_utils.R")
-
 #Read omegas obtained from reunning the core model wth three different seeds
 omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 omega_s2=as.matrix(read.table(file="hgdp_core_s2_mat_omega.out", header=F))
