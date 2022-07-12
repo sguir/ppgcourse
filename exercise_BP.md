@@ -36,7 +36,7 @@ scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/Bay
 
 * The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and for each in turn, in simulations or plot subfolders.
 
-3. **Create a new folder in your laptop** and download there the script **baypass_utils.R** that comes with the BayPass software
+3. **Create a new folder in your laptop** called **"my_results"** and download there the script **baypass_utils.R** that comes with the BayPass software
 
 ```bash
 mkdir my_results
