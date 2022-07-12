@@ -1,7 +1,7 @@
 # PPG_course - BayPass
 
 
-In this practical class we will try to identify human SNPs with **evidences of local adaptive diversification** and/or **significantly associated to geographical variables** while taking into account the null correlation of allele frequencies across populations.
+In this practical class we will try to identify human **SNPs with evidences of local adaptive diversification** and/or **significantly associated to geographical variables** while taking into account the null correlation of allele frequencies across populations.
 
 * We will use a modified version of the data used in Coop et al. (2010). It consists of **Pool-seq data** of **2333 + 2 SNPs** for **927 individuals** from **52 human populations** of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
 These **two SNPs** have been previously reported to be **under positive selection in European populations** and are located in genes (ERC2 and TYR) involved in **light skin and eye color** (Wilde et al.2014).
