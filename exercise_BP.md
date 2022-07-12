@@ -981,7 +981,7 @@ pod.c2.omega=as.matrix(read.table("hgdp_contrast_10000_pods_mat_omega.out"))
 plot(pod.c2.omega,omega_contrast) 
     abline(a=0,b=1)
     
-#Get the distance between the simulated nd the real omega    
+#Get the distance between the simulated and the real omega    
 fmd.dist(pod.c2.omega,omega_contrast)
 
 #Get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the observed data
