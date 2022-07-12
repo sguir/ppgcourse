@@ -45,7 +45,11 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPas
 4. Start a new R session and install and upload the R libraries
 
 ```R
+#Go to the new created forlder in your laptop
 cd ./my_results
+
+#Start a new R session
+R
 
 #Install four R packages
 install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
@@ -67,10 +71,13 @@ To run this model (using read count data) you will need:
 
 > *  For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-1. Run BayPass under the CORE model with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the sbatch command:
+1. Run BayPass under the CORE model with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the **sbatch command**:
 
 ```bash
+#Go to the scripts subfolder
 cd Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/scripts
+
+#Run the CORE Model
 sbatch  run_core_model_seed1.sh
 sbatch  run_core_model_seed2.sh
 sbatch  run_core_model_seed3.sh
@@ -98,18 +105,22 @@ module load BayPass
 # run BayPass (CORE Model) with seed1
 g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core_s1
 ```
-> * To check if it is runnig type: squeue -u username
+> * To check if it is running type: squeue -u username
 > * It takes ~ 6 mins each one
 > * This will generate 7 files for each seed.
 
 2. Download the obtained results in my_folder in your laptop
 
 ```bash
-scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* ./my_results
+#Go to my_results folder
 cd my_results
+
+#Copy the CORE Model results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
+s
 ```
 3. Sanity Check. 
-	3.1. In the R session that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
+	3.1. **In the R session** that you opened before compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
 #Read omegas obtained from reunning the core model wth three different seeds
@@ -122,13 +133,18 @@ pdf(file="omega_s1_s2_comparison.pdf")
 	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
 dev.off()
 ```
+```QUESTION: Are they similar?```
+
 	3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
 ```R
 dist.12=fmd.dist(omega_s1, omega_s2)
 dist.13=fmd.dist(omega_s1, omega_s3)
 dist.23=fmd.dist(omega_s2, omega_s3)
+dist.12
+dist.13
+dist.23
 ```
-```QUESTION: Are they more or less the same?```
+```QUESTION: Are they similar?```
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
@@ -253,9 +269,9 @@ qobj <- qvalue(p = pvals)
 #Get the qvalues from P-values
 qvals <- qobj$qvalues
 
-#Count and compare how many SNPs are significant without and with correction with alpha = 0.01
-sum(pvals < 0.01)
-sum(qvals < 0.01)
+#Count and compare how many SNPs are significant without and with FDR correction with alpha = 0.001
+sum(pvals < 0.001)
+sum(qvals < 0.001)
 ```
 > * In case the *P*-values of the XtXst do not behave well, you will need to perform "neutral" simulations (Pseudo Observed Data –PODs–).
 
@@ -274,7 +290,7 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 module load r-mvtnorm
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 #Start a new R session
@@ -394,8 +410,6 @@ dev.off()
 ```
 ```QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?```
     
-> * The file rs_ids_2335.txt in the folder input_data is a "map" file associated to you original geno file with the name of each SNP (chromosome and position can be found in NCBI database)
-
 ## The STANDARD Model (STDis): importance sampling 
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
 The estimation of the beta regression coefficients for each SNP and covariable is performed using the importance sampling approach.
