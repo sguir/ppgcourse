@@ -14,10 +14,10 @@ These two SNPs have been previously reported to be under positive selection in E
 ```
 
 ## Get data
-1. The data for this session can be retrieved from google drive [data](https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiaion%20_and_covariates%20association.SARA_GUIRAO-RICO)  
+1. The data for this session can be retrieved:  
  
 ```bash
-svn export https://github.com/ppgcourseUB/ppgcourse2022/tree/main/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO
+svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO
 ```
 
 * The folder has two main subfolders:
