@@ -34,7 +34,7 @@ svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_different
 scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
 ```
 
-* The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders.
+* The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and for each in turn, in simulations or plot subfoders.
 
 3. **Create a new folder in your laptop** and download there the script **baypass_utils.R** that comes with the BayPass software
 
