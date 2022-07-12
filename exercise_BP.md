@@ -20,7 +20,7 @@ We are going to work with **three different consoles/terminals**:
 * To download and copy some precomputed results ("results" folder) to "my_folder". 
 
 ## Get data
-1. The data for this session can be retrieved:  
+1. retrieve the **input data** and the **scripts** for this session:  
  
 ```bash
 svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO
@@ -31,24 +31,22 @@ svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_different
 	*  input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
 	*  scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
-2. Get also the precomputed results (results previously obtained results for a matter of visualization) and download them in your laptop
+2. Retrieve also the **precomputed results** (previously obtained results for a matter of visualization or just in case we cannot compute them) and **download them in your laptop**
 
 ```bash
 scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
 ```
 
-3. Crate a new folder in your laptop and download there the script baypass_utils.R that comes with the BayPass software
+* The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders.
+
+3. **Create a new folder in your laptop** and download there the script **baypass_utils.R** that comes with the BayPass software
 
 ```bash
 mkdir my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/baypass_utils.R ./my_results
 ```
 
-* The files in the results folder are classified in subfolders according to the model/process (e.g., CORE, STDis,...) and each in simulations or plot subfoders. 
-
-:warning: The BayPass Models and the simulations are going to be run in the cloud whereas the calculation of some statistics and the plots are going to be run (using R) in your laptop.
-
-4. Start a new R session and install and upload the R libraries
+4. **Start a new R session** and **install and upload the R libraries**
 
 ```R
 #Go to the new created forlder in your laptop
@@ -63,7 +61,7 @@ require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("baypass_utils.R")
 ```
 
-Now we are ready to run BayPass.
+Now you are ready to run BayPass.
 
 ## The CORE Model
 The core model allows to perform **genome scan for differentiation** (covariate free) using the **XtX statistics** (\~Fst).
