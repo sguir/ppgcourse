@@ -112,7 +112,6 @@ pdf(file="omega_s1_s2_comparison.pdf")
 dev.off()
 ```
 	3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
-
 ```R
 dist.12=fmd.dist(omega_s1, omega_s2)
 dist.13=fmd.dist(omega_s1, omega_s3)
@@ -428,13 +427,13 @@ module load BayPass
 g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis
 ```
 
-Copy the previously obtained results to the my_results folder in your laptop:
+2. Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* ./my_results
 cd my_results
 ```
-2. Inspect the obtained results.
+3. Inspect the obtained results.
 
 ```R
 #Read the file with the BF, the eBPis and the correlation coefficients parameters
@@ -508,9 +507,9 @@ dev.off()
 ```
 ```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?```
 
-3. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
+4. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
 
-3.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" with the command sbatch.
+	4.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" with the command sbatch.
 
 ```bash
 module load r-mvtnorm
@@ -540,7 +539,7 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 	sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_10000")
 ```
 
-3.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch.
+	4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the command sbatch.
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -565,13 +564,13 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-Copy the previously obtained results to the my_results folder in your laptop:
+	4.3. Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* ./my_results
 cd my_results
 ```
-	3.3. Sanity check.
+	4.4. Sanity check.
 
 ```R
 #Read the files resulting from running he CORE Model and from simulating PODs
@@ -598,7 +597,7 @@ plot(pod.pi.beta.coef_10000, pi.beta.coef, xlab="pi.beta from PODs",
 dev.off()
 ```
 
-	3.4. Calibrate the BF, the eBPis and the correlation coefficients parameters.
+	4.5. Calibrate the BF, the eBPis and the correlation coefficients parameters.
 
 ```R
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
@@ -751,13 +750,13 @@ module load BayPass
 g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
 ````
 
-Copy the previously obtained results to the my_results folder in your laptop:
+2. Copy the previously obtained results to the my_results folder in your laptop:
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_contrast_* ./my_results
 cd my_results
 ```
-2. Inspect the obtained results.
+3. Inspect the obtained results.
 
 ```R
 #Read the files with the BF and the C2
@@ -774,9 +773,9 @@ dev.off()
 ```
 ```QUESTION: Are the C2 *P*-values behaving well?```
 
-3. Calibrate C2 statistics.
+4. Calibrate C2 statistics.
 
-3.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
+	4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
 
 ```bash
 module load r-mvtnorm
@@ -808,7 +807,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 
 ```
 
-3.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
+	4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -833,14 +832,14 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
 ```
 
-Copy the previously obtained results to the my_results folder in your laptop:
+	4.3. Copy the previously obtained results to the my_results folder in your laptop.
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* *C2_10000* ./my_results
 cd my_results
 ```
 
-3.3. Sanity Check.
+	4.4. Sanity Check.
 
 ```R
 #Get estimate of omega from the PODs
@@ -856,7 +855,7 @@ plot(pod.c2.pi.beta.coef,c2.pi.beta.coef)
     abline(a=0,b=1)
 ```
 
-3.4. C2 and BF calibration.
+	4.5. C2 and BF calibration.
 
 ```R
 #Read the files with the simulated C2 and BF
@@ -879,7 +878,7 @@ plot(covariates_eu.bf,covariates_eu.C2$M_C2,
 dev.off()
 ```
 
-3.5. Plot the observed C2 and BF calibration for a matter of comparison.
+	4.6. Plot the observed C2 and BF calibration for a matter of comparison.
 
 ```R
 #Read the obtained results
