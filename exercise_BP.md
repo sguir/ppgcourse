@@ -443,9 +443,9 @@ dev.off()
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
 The estimation of the beta regression coefficients for each SNP and covariable is performed using the importance sampling approach.
 
-* Remember that this model is recommended when the number of populations is small (e.g.,  8) and/or when populations are highly differentiated.
-* The importance sampling algorithm relies on approximations to estimate the regression coefficients (do not sample them from the posterior distribution and hence, the model should be run 3-5 times with different seeds to check consistency across runs). 
-* The median of the parameter of insterest (e.g., beta) among runs can be taken as the estimate (beta) of the parameter.
+* Remember that this model is **recommended when the number of populations is small (e.g.,  8**) and/or **when populations are highly differentiated**.
+* The importance sampling algorithm relies on approximations to estimate the regression coefficients (do not sample them from the posterior distribution and hence, **the model should be run 3-5 times with different seeds** to check consistency across runs). 
+* The **median of the parameter of insterest** (e.g., beta) among runs can be taken as the estimate (beta) of the parameter.
 * Bayes factor importance sampling (BFis) and the approximated Bayesian P-value (eBPis) are used to evaluate if a particular SNP is associated with a particular covariable and as the XtX statistic in the CORE model, they should be calibrated. 
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
@@ -606,7 +606,7 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 # close R session
 q()
 ```
-
+⚠️ We are not running this part for a matter of time ( it takes about ~ 25 mins). Instead, we are going to use the precomputed files in the results folder
 4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the **sbatch command**.
 
 ```bash
@@ -638,11 +638,20 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
+⚠️
 4.3. Copy the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* .
+```
+
+4.3. Copy the precomputed results to the **my_results folder in your laptop**:
+
+```bash
+#In your laptop
+cd my_results
+scp ../results/STDis_Model/simulations/*_10000* .
 ```
 
 4.4. Sanity check (**R in your laptop**).
@@ -791,9 +800,11 @@ dev.off()
 ## The STDis Model and CONTRAST Analysis
 This "combined" analysis allows to evaluate to which extent the population binary covariables are associated to specific marker/SNP using two different approaches: i) running the STDis model and hence, testing are (linearly) associated to each marker/SNP or ii) performing a contrast analysis to compute contrast of standardized allele frequencies between two groups of populations.
 
-* The contrast anaysis can be if the assumed linear relationship with allele frequencies is not entirely satisfactory 
+* The contrast anaysis can be interesting if the assumed linear relationship between the covariates and allele frequencies is not entirely satisfactory. 
 
-* In addition, the association analyses carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
+* The association analyses (STDis, STDmcmc, AUX Model) carried out with categorical or binary covariables can be problematic when dealing with small data sets or if one wishes to disregard some populations. 
+
+* Remember all the recomendations described above for the STDis Model
 
 To run this analysis (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
@@ -803,7 +814,14 @@ To run this analysis (with allele data) you will need:
 * To specify if you want to scale covariables (```-scalecov```)
 * A prefix to name the output (```-outprefix```)
  
-1. Run the STDis and the Contrast Model by submit the job script "run_stdis_contr_model.sh" with the command sbatch. 
+1. Run the STDis and the Contrast Model by submit the job script "run_stdis_contr_model.sh" with the **sbatch command**. 
+
+```bash
+#In the scripts subfolder
+sbatch run_stdis_contr_model.sh
+```
+
+> * This is the code to run the "run_stdis_contr_model.sh" script
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -818,7 +836,7 @@ To run this analysis (with allele data) you will need:
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=./input
 cd $INPUT
 
 # module load                                                                                                           
@@ -828,12 +846,14 @@ module load BayPass
 g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
 ````
 
-2. Copy the previously obtained results to the my_results folder in your laptop:
+2. Copy the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
-scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_contrast_* ./my_results
 cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_contrast_* .
+
 ```
+
 3. Inspect the obtained results.
 
 ```R
