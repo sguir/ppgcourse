@@ -130,7 +130,6 @@ pdf(file="omega_s1_s2_comparison.pdf")
 	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
 dev.off()
 ```
-
 ```diff
 - QUESTION: Are they similar?
 ```
@@ -145,7 +144,6 @@ dist.12
 dist.13
 dist.23
 ```
-
 ```diff
 - QUESTION: Are they similar?
 ```
@@ -220,7 +218,6 @@ plot(hgdp_s1.snp.res$XtXst, xlab="SNP", ylab="XtXst", main="XtXst Seed 1")
 	points(x= 2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$XtXst, col = "red", pch=20)
 dev.off()
 ```
-
 ```diff
 - QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?
 ```
@@ -438,7 +435,6 @@ dev.off()
 ```diff
 - QUESTION: Are the Omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?
 ```
-
 ```diff
 - QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?
 ```
@@ -571,7 +567,6 @@ xlab="SNP",ylab=expression(beta~"coefficient"))
 	mtext("STDis MODEL: European origin",side=3,line=- 2,outer=TRUE)
 dev.off()
 ```
-
 ```diff
 - QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?
 ```
@@ -786,7 +781,6 @@ plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$Beta_is,
 	mtext("STDis Model: European Origin",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 ```
-
 ```diff
 - QUESTION: How many significant SNPs are correlating with any of the covariates? based on what criteria, BF or eBPis? Are all of them correlating in the same way?
 
@@ -984,7 +978,6 @@ plot(covariates_eu.bf,covariates_eu.C2$log10.1.pval.,
 		y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2335, ]$log10.1.pval., col="red", pch=20)
 dev.off()
 ```
-
 ```diff
 - QUESTION: How many SNPs are significant before and after calibrating the C2 statistic using PODs? and how many after calibrating the BF?
 ```
