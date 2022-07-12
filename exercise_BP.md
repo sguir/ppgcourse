@@ -12,6 +12,13 @@ These **two SNPs** have been previously reported to be **under positive selectio
 
 ```
 
+## Working space
+We are going to work with three different consoles/terminals:
+
+	1. To run BayPass Models models (sbatch command) and Simulations (R) in the cluster.
+	2. To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
+	3. To download and copy some precomputed results ("results" folder) to "my_folder". 
+
 ## Get data
 1. The data for this session can be retrieved:  
  
@@ -59,18 +66,18 @@ source("baypass_utils.R")
 Now we are ready to run BayPass.
 
 ## The CORE Model
-The core model allows to perform genome scan for differentiation (covariate free) using the XtX statistics (\~Fst).
-The main advantage of this approach is that explicitly accounts for the covariance structure in population allele frequencies (via estimating) resulting from the demographic history of the populations.
+The core model allows to perform **genome scan for differentiation** (covariate free) using the **XtX statistics** (\~Fst).
+The main advantage of this approach is that explicitly **accounts for the covariance structure in population allele frequencies** (via estimating) resulting from the demographic history of the populations.
 
 To run this model (using read count data) you will need:
-* The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
-* A random number for the seed (in case of needed; ```-seed```)
-* A prefix to name the output (```-outprefix```)
+* The **number of populations** in the analysis (```-npop```)
+* The **genotype file** (hgdp.geno in input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* A random number for the **seed** (in case of needed; ```-seed```)
+* A **prefix to name the output** (```-outprefix```)
 
-> *  For more see the specifications in the [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
+> *  For more specifications see [BayPass manual](https://www1.montpellier.inra.fr/CBGP/software/baypass/files/BayPass_manual_2.3.pdf) 
 
-1. Run BayPass under the CORE model with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the **sbatch command**:
+1. Run BayPass under the **CORE model** with three different seeds by submit the jobs' scripts "run_core_model_seed1.sh","run_core_model_seed2.sh" and  "run_core_model_seed3.sh"  with the **sbatch command**:
 
 ```bash
 #Run the CORE Model from the scripts subfolder
@@ -106,7 +113,7 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core
 > * It takes ~ 6 mins each one
 > * This will generate 7 files for each seed.
 
-2. Download the obtained results in **my_folder in your laptop**
+2. Download the obtained results in **my_folder in your laptop**.
 
 ```bash
 #Go to my_results folder
@@ -116,8 +123,7 @@ cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
 ```
 3. Sanity Check. 
-3.1. **In the R session** that you opened before, compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model .
-.
+3.1. **In the R session** that you opened before, compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
 #Read omegas obtained from reunning the core model wth three different seeds
@@ -134,7 +140,7 @@ dev.off()
 - QUESTION: Are they similar?
 ```
 
-3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
+3.2. Compute the **distances between pairs of omegas** to **check consistency*** in the estimation of parameters of the model.
 
 ```R
 dist.12=fmd.dist(omega_s1, omega_s2)
@@ -152,7 +158,7 @@ dist.23
 
 4. Visualization of the shared history of populations (**R in your laptop**).
 
-4.1. Explore the shared history of populations by transforming the omega covariance matrix into a correlation matrix using the R function cov2cor().
+4.1. Explore the **shared history of populations** by transforming the omega covariance matrix into a **correlation matrix** using the R function cov2cor().
 
 ```R
 #Setup the population names for each omega matrix:
@@ -171,7 +177,7 @@ corrplot(cor.mat_s1, method="color",mar=c(2,1,2,2)+0.1,
 		tl.cex=0.5)
 dev.off()
 ```
-4.2. Explore the shared history of populations by transforming the correlation matrix into a hierarchical clustering tree using the R function hclust().
+4.2. Explore the **shared history of populations** by transforming the correlation matrix into a **hierarchical clustering tree** using the R function hclust().
 
 ```R
 #Transform the correlation matrix into a hierarchical clustering tree
@@ -184,7 +190,7 @@ plot(hgdp.tree_s1, type="p",
 	cex=0.5)
 dev.off()
 ```
-4.3. Explore the history of populations by performing a heatmap and hierarchical clustering tree (using the average agglomeration method). 
+4.3. Explore the **shared history of populations** by performing a **heatmap and hierarchical clustering tree** (using the average agglomeration method). 
 
 ```R
 pdf(file="omega_heatmap.pdf")
@@ -193,7 +199,7 @@ heatmap(1-cor.mat_s1,hclustfun = hclust.ave,
 	main=expression("Heatmap of "~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
 dev.off()
 ```
-4.4. Explore the history of populations by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) PCA–like analysis (**R in your laptop**).
+4.4. Explore the **shared history of populations** by performing an eigen-decomposition of the scaled covariance matrix of the population allele frequencies to allow representation in a two-dimension plot. This actually corresponds to a (between population) **PCA–like analysis** (**R in your laptop**).
 
 ```R
 pdf(file="omega_PCA-like.pdf")
@@ -204,7 +210,7 @@ dev.off()
 ```
 > * If you want to modify the size of the text you should modify the baypass_utils.R
 
-5. Explore the values of the XtX statistic (~Fst) obtained under the CORE model (**R in your laptop**).
+5. Explore the values of the **XtXst statistic** (~Fst) obtained under the CORE model (**R in your laptop**).
 
 ```R
 #Read the XtX file (here only for seed1):
@@ -222,7 +228,7 @@ dev.off()
 - QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?
 ```
 
-6. Check behavior of the *P*-values associated to the XtXst estimator (**R in your laptop**).
+6. **Check behavior of the *P*-values** associated to the XtXst estimator (**R in your laptop**).
 
 ```R
 pdf("omega_XtXst_pvals_hist.pdf")
@@ -260,7 +266,7 @@ hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
 - QUESTION: which XtXst values are significant?
 ```
 
-7. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values (**R in your laptop**).
+7. **Correct by False Discovery Rate (FDR)** by transforming the *P*-values into *q*-values (**R in your laptop**).
 
 ```R
 #Install the "qvalue" R package
@@ -286,14 +292,13 @@ sum(qvals < 0.001)
 
 8. Pseudo Observed Data (PODs) 
 
-Here, we are going to simulate data (PODs) using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
-PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the
-overall (across population) SNP allele frequencies).
-Once these PODS are simulated, we need to run again the CORE model to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (calibration process)
+Here, we are going to **simulate data (PODs)** using the R function simulate.baypass() in the baypass_utils.R script (provided in the BayPass package).
+PODs are simulated under the inference model (e.g., using posterior estimates of the covariance matrix and the a and b parameters of the beta prior distribution for the overall (across population) SNP allele frequencies).
+Once these PODS are simulated, we need to **run again the CORE model with the PODs as input** to built the \"expected\" distribution of the XtX values under the inference model in order to find which of the observed XtX values are significantly different from the expected (**calibration process**)
 
-> * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
+> * We want to perform **two different sets of simulations** to inspect how many simulations are needed to retrieve the estimated demographic history: i) **simulating 1,000 PODs**; ii) simulating **100,000 PODs**. :warning: However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-8.1. Simulate 1,000 Pseudo Observed Data (PODs) **in the cluster**:
+8.1. **Simulate 1,000** Pseudo Observed Data (PODs) **in the cluster**:
 
 :warning: Copy the text only until install.packages. It will ask you:
 	* Would you like to use a personal library instead? yes
@@ -336,9 +341,9 @@ simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000,
 q()
 ```
 
-> *  The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
+> * The G.hgdp_pods_1000 file is now the new genotype input file resulting from the simulation process.  
 
-8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with **sbatch command**:
+8.2. **Run again, the CORE model**  only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with **sbatch command**:
 
 ```bash
 #In the scripts	subfolder
@@ -369,7 +374,7 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
 ```
 
-:warning: For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
+:warning: For the second set of simulations, we are going to **use the precomputed files** resulting from running the CORE model with the 100000 simulations as input.
 
 8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results folder in your laptop**:
 
@@ -386,7 +391,7 @@ cd my_results
   
 8.3. Sanity Check (**R in your laptop**).
 
-Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
+Here, we are **comparing the simulated data (PODS)** under the inference model **to the observed data** to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
 
 ```R
@@ -458,13 +463,13 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
 To run this model (with allele data) you will need:
-* The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
-* The covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* To specify if you want to scale covariables (```-scalecov```)
-* A prefix to name the output (```-outprefix```)
+* The **number of populations** in the analysis (```-npop```)
+* The **genotype file** (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* To specify if you want to **scale** covariables (```-scalecov```)
+* **A prefix to name the output** (```-outprefix```)
 
-1. Run BayPass with the STANDARD model importance sampling by submit the job script "run_stdis_model.sh" with **the sbatch command**:
+1. Run BayPass with the **STANDARD model importance sampling** by submit the job script "run_stdis_model.sh" with **the sbatch command**:
 
 ```bash
 #In the scripts subfolder
@@ -497,13 +502,13 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -out
 > * this generates 9 output files.
 > * It takes ~ 6 mins.
 
-2. Copy the previously obtained results to the **my_results folder in your laptop**:
+2. **Copy** the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* .
 ```
-3. Inspect the obtained results (**R in your laptop**).
+3. Inspect the **obtained results** (**R in your laptop**).
 
 ```R
 #Read the file with the BF, the eBPis and the correlation coefficients parameters
@@ -579,9 +584,9 @@ dev.off()
 - QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?
 ```
 
-4. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
+4. **Calibrate the STDis Parameters** (BF, the eBPis and the correlation coefficients) using PODs.
 
-4.1. Simulate 10,000 PODs by submit the job script "run_10000_simulations.sh" **in the cluster**.
+4.1. **Simulate 10,000 PODs** by submit the job script "run_10000_simulations.sh" **in the cluster**.
 
 ```bash
 module load r-mvtnorm
@@ -692,7 +697,7 @@ plot(pod.pi.beta.coef_10000, pi.beta.coef, xlab="pi.beta from PODs",
 dev.off()
 ```
 
-4.5. Calibrate the BF, the eBPis and the correlation coefficients parameters.
+4.5. **Calibrate** the BF, the eBPis and the correlation coefficients parameters.
 
 ```R
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
@@ -809,7 +814,7 @@ dev.off()
 # EXTRA EXERCISES
 
 ## The STDis Model and CONTRAST Analysis
-This "combined" analysis allows to evaluate to which extent the population binary covariables are associated to specific marker/SNP using two different approaches: i) running the STDis model and hence, testing are (linearly) associated to each marker/SNP or ii) performing a contrast analysis to compute contrast of standardized allele frequencies between two groups of populations.
+This **"combined" analysis** allows to evaluate to which extent the **population binary covariables are associated to specific markers/SNPs** using two different approaches: i) running the **STDis model** and hence, testing are (linearly) associated to each marker/SNP or ii) performing a **contrast analysis** to compute contrast of standardized allele frequencies between two groups of populations.
 
 * The contrast anaysis can be interesting if the assumed linear relationship between the covariates and allele frequencies is not entirely satisfactory. 
 
@@ -818,14 +823,14 @@ This "combined" analysis allows to evaluate to which extent the population binar
 * Remember all the recomendations described above for the STDis Model
 
 To run this analysis (with allele data) you will need:
-* The number of populations in the analysis (```-npop```)
-* The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
-* The binary covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
-* The binary covariates file (covariates in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
-* To specify if you want to scale covariables (```-scalecov```)
-* A prefix to name the output (```-outprefix```)
+* The **number of populations** in the analysis (```-npop```)
+* The **genotype file** (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **binary covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
+* The **binary covariates file** (covariates in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
+* To specify if you want to **scale covariables** (```-scalecov```)
+* A **prefix to name the output** (```-outprefix```)
  
-1. Run the STDis and the Contrast Model by submit the job script "run_stdis_contr_model.sh" with the **sbatch command**. 
+1. Run the **STDis and the Contrast Model** by submit the job script "run_stdis_contr_model.sh" with the **sbatch command**. 
 
 ```bash
 #In the scripts subfolder
@@ -859,7 +864,7 @@ g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariate
 > * It generates 9 output files.
 > * It takes about 6 mins.
 
-2. Copy the previously obtained results to the **my_results folder in your laptop**:
+2. **Copy** the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
@@ -867,7 +872,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 
 ```
 
-3. Inspect the obtained results (**R in your laptop**).
+3. Inspect the obtained **results** (**R in your laptop**).
 
 ```R
 #Read the files with the BF and the C2
@@ -887,9 +892,9 @@ dev.off()
 - QUESTION: Are the C2 *P*-values behaving well?
 ```
 
-4. Calibrate C2 statistics.
+4. **Calibrate** C2 statistics.
 
-4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" **in the cluster**. 
+4.1. **Simulate 10,000 neutral PODs** by submit the job script "run_10000_c2_simulations.sh" **in the cluster**. 
 
 ```bash
 module load r-mvtnorm
@@ -924,7 +929,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 q()
 ```
 
-4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the **sbatch command**.  
+4.2. Run the **STDis and contrast Models with the 10,000 PODs as input** by submit the job script "run_stdis_contrast_10000_simulations.sh" with the **sbatch command**.  
 
 ```bash
 #In the scripts subfolder
@@ -959,7 +964,7 @@ g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efil
 > * It generates 9 output files
 > * It takes about 20 mins
 
-4.3. Copy the previously obtained results to the **my_results folder in your laptop**.
+4.3. **Copy** the previously obtained results to the **my_results folder in your laptop**.
 
 ```bash
 cd my_results
@@ -990,7 +995,7 @@ plot(pod.c2.pi.beta.coef,c2.pi.beta.coef)
     abline(a=0,b=1)
 ```
 
-4.5. C2 and BF calibration (**R in your laptop**).
+4.5. C2 and BF **calibration** (**R in your laptop**).
 
 ```R
 #Read the obtained results
