@@ -25,7 +25,7 @@ svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_different
 
 * The folder has two main subfolders:
 
-	*  input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
+	*  input: genotype and covariate input data needed for the analysis. 
 	*  scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
 2. Retrieve also the **precomputed results** (previously obtained results; for a matter of visualization or just in case we cannot compute them) and **download them in your laptop**
