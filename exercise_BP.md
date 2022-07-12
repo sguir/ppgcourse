@@ -3,21 +3,18 @@
 
 In this practical class we will try to identify human **SNPs with evidences of local adaptive diversification** and/or **significantly associated to geographical variables** while taking into account the null correlation of allele frequencies across populations.
 
-* We will use a modified version of the data used in Coop et al. (2010). It consists of **Pool-seq data** of **2333 + 2 SNPs** for **927 individuals** from **52 human populations** of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
+* We will use a modified version of the data used in Coop et al. (2010). It consists of **Pool-seq data** corresponding to **2335 SNPs** (2333 + 2) for **927 individuals** from **52 human populations** of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
 These **two SNPs** have been previously reported to be **under positive selection in European populations** and are located in genes (ERC2 and TYR) involved in **light skin and eye color** (Wilde et al.2014).
 * The covariates (geographical variables) explored are **latitude**, **longitude** and a categorical variable with value = 1 if the population is **European** and -1 if is not.
  
-```diff
-- Note that even we are performing the analysis with a very reduce dataset, the time it takes to run some of the models is above what we have in this practice and therefore, in some cases, we will use some of the results previously obtained to plot them in R and to run the next models.
-
-```
+:warning: Note that even we are performing the analysis with a very reduce dataset, the time it takes to run some of the models is above the available time in this practice and therefore, in some cases, we will use some of the results previously obtained (**precomputed results**) to calculate some of the statistics or to plot them using R.
 
 ## Working space
 We are going to work with **three different consoles/terminals**:
 
-* To run BayPass Models (sbatch command) and Simulations (R) in the cluster.
+* To run BayPass Models (sbatch command) and simulations (R) in the cluster.
 * To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
-* To download and copy some precomputed results ("results" folder) to a new created folder "my_folder". 
+* To download and copy some precomputed results ("results" folder) to a new created folder "my_folder" in your laptop. 
 
 ## Get data
 1. Retrieve the **input data** and the **scripts** for this session:  
@@ -31,7 +28,7 @@ svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_different
 	*  input: genotype and covariate input data and the script baypass_utils.R needed for some analysis. 
 	*  scripts: scripts to execute some of the BayPass models and to perform simulations (PODs).  
 
-2. Retrieve also the **precomputed results** (previously obtained results for a matter of visualization or just in case we cannot compute them) and **download them in your laptop**
+2. Retrieve also the **precomputed results** (previously obtained results; for a matter of visualization or just in case we cannot compute them) and **download them in your laptop**
 
 ```bash
 scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/results .
@@ -43,13 +40,14 @@ scp -r user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/Bay
 
 ```bash
 mkdir my_results
-scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/baypass_utils.R ./my_results
+cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/data/datasets/BayPass/baypass_utils.R .
 ```
 
-4. **Start a new R session** and **install and upload the R libraries**
+4. Start a **new R session** and **install** and **upload** the **R libraries**
 
 ```R
-#Go to the new created forlder in your laptop
+#Go to the new created folder in your laptop
 cd ./my_results
 
 #Start a new R session
@@ -121,6 +119,7 @@ cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
 ```
 3. **Sanity Check**. 
+
 3.1. **In the R session** that you opened before, compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
