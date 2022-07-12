@@ -284,7 +284,7 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 > * We want to perform two different sets of simulations to inspect how many simulations are needed to retrieve the estimated demographic history: i) simulating 1,000 PODs; ii) simulating 100,000 PODs. However, here we are going to run only the first (simu.hgdp_1000) of the two simulation experiments for a matter of time. Instead, we will use the precomputed file with the 100,000 simulations.
 
-	8.1. Simulate 1,000 Pseudo Observed Data (PODs) in the cloud:
+	8.1. Simulate 1,000 Pseudo Observed Data (PODs) **in the cluster**:
 
 ```bash
 module load r-mvtnorm
@@ -313,11 +313,20 @@ omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 # simulated 1000 PODs
 simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, 
     sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
+
+#Close R session
+q()
 ```
 
 > *  The G.hgdp_pods_1000 file is now the new genotype input files resulting from the simulation process.  
 
 	8.2. Run again, the Core model only with the first set of simulations (G.hgdp\_pods\_1000) by submit the job script "run_core_1000_simulations.sh" with the command sbatch:
+
+```bash
+cd ../scripts	
+sbatch run_core_1000_simulations.sh 
+```
+> * this is the code for the run_core_1000_simulations.sh script
 
 ```bash
 #!/bin/bash                                                                                                             
