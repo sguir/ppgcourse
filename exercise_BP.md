@@ -239,7 +239,7 @@ plot(hgdp_s1.snp.res$XtXst,xlab="SNP", ylab="XtXst", main="XtXst" )
 	points(x=2334, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2334, ]$XtXst, col="red", pch=20)
 	points(x=2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2335, ]$XtXst, col="red", pch=20)
 plot(hgdp_s1.snp.res$log10.1.pval.,ylab=expression('XtXst '*italic(P)*'-value (-log10 scale)'), 
-    xlab="SNP", main=expression('XtXst '*italic(P)*'-value'))
+    	xlab="SNP", main=expression('XtXst '*italic(P)*'-value'))
 	points(x=2334, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2334, ]$log10.1.pval., col="red", pch=20)
 	points(x=2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1]==2335, ]$log10.1.pval., col="red", pch=20)
 	abline(h=3,lty=2) #correspods to a P-value theshold = 0.001
@@ -295,6 +295,12 @@ Once these PODS are simulated, we need to run again the CORE model to built the 
 
 8.1. Simulate 1,000 Pseudo Observed Data (PODs) **in the cluster**:
 
+:warning: Copy the text only until install.packages. It will ask you:
+	* Would you like to use a personal library instead? yes
+	* Would you like to create a personal library‘~/R/x86_64-pc-linux-gnu-library/4.1’ to install packages into? yes
+	* Secure CRAN mirrors
+Then you can load the packages after installing	
+		
 ```bash
 #In the scripts subfoder
 module load r-mvtnorm
@@ -306,21 +312,23 @@ cd $INPUT
 #Start a new R session
 R
 
-#Install packages
+#Install and load packages
 install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+
+#Load the packages
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
-# get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-# upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
+#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
 
-# read the omega matrix from seed1 obtained when running the CORE Model:
+#Read the omega matrix from seed1 obtained when running the CORE Model:
 omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 
-# simulated 1000 PODs
+#Simulated 1000 PODs
 simu.hgdp_1000 <- simulate.baypass(omega.mat=omega_s1, nsnp=1000, 
     sample.size=hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_1000")
 
@@ -587,19 +595,21 @@ R
 
 #Install and load packages
 #install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
+
+#Load the packages
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
-# get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
+#Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-# upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
+#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
 
-# read the omega matrix from seed1 obtained when running the CORE Model:
+#Read the omega matrix from seed1 obtained when running the CORE Model:
 omega_s1=as.matrix(read.table(file="hgdp_core_s1_mat_omega.out", header=F))
 
-# generate 10,000 PODs
+#Generate 10,000 PODs
 simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 	sample.size= hgdp.data$NN, beta.pi=pi.beta.coef, pi.maf=0, suffix="hgdp_pods_10000")
 	
@@ -895,16 +905,16 @@ R
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 
-# get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution
+#Get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution
 c2.pi.beta.coef=read.table("hgdp_contrast_summary_beta_params.out",h=T)$Mean
 
-# upload the original data to obtain total allele count
+#Upload the original data to obtain total allele count
 hgdp.data<-geno2YN("hgdp.geno")
 
-# read the omega matrix:
+#Read the omega matrix:
 omega_contrast=as.matrix(read.table(file="hgdp_contrast_mat_omega.out", header=F))
 
-# generate 10000 PODs
+#Generate 10000 PODs
 simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 	sample.size=hgdp.data$NN, beta.pi=c2.pi.beta.coef, pi.maf=0, 
 	suffix="hgdp_C2_10000_pods")
