@@ -845,6 +845,8 @@ module load BayPass
 # run BayPass (STDis and Contrast Model)
 g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
 ````
+> * It generates 9 output files.
+> * It takes about 6 mins.
 
 2. Copy the previously obtained results to the **my_results folder in your laptop**:
 
@@ -854,7 +856,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 
 ```
 
-3. Inspect the obtained results.
+3. Inspect the obtained results (**R in your laptop**).
 
 ```R
 #Read the files with the BF and the C2
@@ -876,18 +878,19 @@ dev.off()
 
 4. Calibrate C2 statistics.
 
-4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
+4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" **in the cluster**. 
 
 ```bash
 module load r-mvtnorm
+
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 #Start a new R session
 R
 
-#Install packages
+#Install and load packages
 #install.packages(c("corrplot", "ape", "geigen", "mvtnorm"))
 require(corrplot); require(ape); require(geigen);require(mvtnorm)
 source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
@@ -906,9 +909,18 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 	sample.size=hgdp.data$NN, beta.pi=c2.pi.beta.coef, pi.maf=0, 
 	suffix="hgdp_C2_10000_pods")
 
+# close R session
+q()
 ```
 
-4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
+4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the **sbatch command**.  
+
+```bash
+#In the scripts subfolder
+sbatch run_stdis_contrast_10000_simulations.sh
+```
+
+> * This is the code to run the "run_stdis_contrast_10000_simulations.sh" script:
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -923,7 +935,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 # module load                                                                                                           
@@ -933,22 +945,33 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
 ```
 
-4.3. Copy the previously obtained results to the my_results folder in your laptop.
+> * It generates 9 output files
+> * It takes about 20 mins
+
+4.3. Copy the previously obtained results to the **my_results folder in your laptop**.
 
 ```bash
-scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* *C2_10000* ./my_results
 cd my_results
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* 
+scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*C2_10000* .
 ```
 
-4.4. Sanity Check.
+4.4. Sanity Check (**R in your laptop**).
 
 ```R
+#Read the omega matrix from observed data:
+omega_contrast=as.matrix(read.table(file="hgdp_contrast_mat_omega.out", header=F))
+
 #Get estimate of omega from the PODs
 pod.c2.omega=as.matrix(read.table("hgdp_contrast_10000_pods_mat_omega.out"))
 plot(pod.c2.omega,omega_contrast) 
     abline(a=0,b=1)
+    
 #Get the distance between the simulated nd the real omega    
 fmd.dist(pod.c2.omega,omega_contrast)
+
+#Get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the observed data
+c2.pi.beta.coef=read.table("hgdp_contrast_summary_beta_params.out",h=T)$Mean
 
 #Get estimates (post. mean) of both the a_pi and b_pi parameters of the Pi Beta distribution from the POD analysis
 pod.c2.pi.beta.coef=read.table("hgdp_contrast_10000_pods_summary_beta_params.out",h=T)$Mean
@@ -956,9 +979,13 @@ plot(pod.c2.pi.beta.coef,c2.pi.beta.coef)
     abline(a=0,b=1)
 ```
 
-4.5. C2 and BF calibration.
+4.5. C2 and BF calibration (**R in your laptop**).
 
 ```R
+#Read the obtained results
+covariates_eu.bf.all <-
+	read.table(file="hgdp_contrast_summary_betai_reg.out", h=T)
+
 #Read the files with the simulated C2 and BF
 pod.c2_10000=read.table("hgdp_contrast_10000_pods_summary_contrast.out",h=T)
 pod.BF.10000=read.table("hgdp_contrast_10000_pods_summary_betai_reg.out",h=T)
@@ -979,12 +1006,12 @@ plot(covariates_eu.bf,covariates_eu.C2$M_C2,
 dev.off()
 ```
 
-4.6. Plot the observed C2 and BF calibration for a matter of comparison.
+4.6. Plot the observed C2 and BF calibration for a matter of comparison (**R in your laptop**).
 
 ```R
 #Read the obtained results
 covariates_eu.bf.all <-
-read.table(file="hgdp_contrast_summary_betai_reg.out", h=T)
+	read.table(file="hgdp_contrast_summary_betai_reg.out", h=T)
 
 #Plot
 pdf("C2_and_BF_and_Pvals.pdf")
