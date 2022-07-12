@@ -369,7 +369,7 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000 
 ```
 
-> * For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
+:warning: For the second set of simulations, we are going to use the precomputed file resulting from running the CORE model with the 100000 simulations as input.
 
 8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results folder in your laptop**:
 
@@ -616,9 +616,10 @@ simu.hgdp_10000 <- simulate.baypass(omega.mat=omega_s1, nsnp=10000,
 # close R session
 q()
 ```
-⚠️ We are not running this part for a matter of time ( it takes about ~ 25 mins). Instead, we are going to use the precomputed files in the results folder
+⚠️ We are not running the part between the two :no_entry: symbols for a matter of time ( it takes about ~ 25 mins). Instead, we are going to use the precomputed files in the results folder
 4.2. Run STDis model with 10,000 PODS as input by submit the job script "run_stdis_10000_simulations.sh" with the **sbatch command**.
 
+:no_entry:
 ```bash
 #In the scripts subfoder
 sbatch run_stdis_10000_simulations.sh
@@ -648,13 +649,13 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_pods_10000 -efile covariates -scalecov -nthreads 8 -outprefix hgdp_stdis_10000_pods
 ```
 
-⚠️
 4.3. Copy the previously obtained results to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_10000* .
 ```
+:no_entry:
 
 4.3. Copy the precomputed results to the **my_results folder in your laptop**:
 
