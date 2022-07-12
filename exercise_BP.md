@@ -130,7 +130,10 @@ pdf(file="omega_s1_s2_comparison.pdf")
 	plot(omega_s1, omega_s2) ; abline(a=0,b=1)
 dev.off()
 ```
-```QUESTION: Are they similar?```
+
+```diff
+- QUESTION: Are they similar?
+```
 
 3.2. Compute the distances between pairs of omegas to check consistency in the estimation of parameters of the model.
 
@@ -142,7 +145,10 @@ dist.12
 dist.13
 dist.23
 ```
-```QUESTION: Are they similar?```
+
+```diff
+- QUESTION: Are they similar?
+```
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
@@ -214,7 +220,10 @@ plot(hgdp_s1.snp.res$XtXst, xlab="SNP", ylab="XtXst", main="XtXst Seed 1")
 	points(x= 2335, y=hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$XtXst, col = "red", pch=20)
 dev.off()
 ```
-```QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?```
+
+```diff
+- QUESTION: Which are the XtX outliers? How many there are? Do we need to perform a test to know how many are significant?
+```
 
 6. Check behavior of the *P*-values associated to the XtXst estimator (**R in your laptop**).
 
@@ -239,7 +248,9 @@ plot(hgdp_s1.snp.res$log10.1.pval.,ylab=expression('XtXst '*italic(P)*'-value (-
 	abline(h=3,lty=2) #correspods to a P-value theshold = 0.001
 dev.off()
 ```
-```QUESTION: Where are the two putative outliers (red points)?```
+```diff
+- QUESTION: Where are the two putative outliers (red points)?
+```
 
 6.1. Inspect the *P*-values associated two the two putative outliers.
 
@@ -248,7 +259,9 @@ dev.off()
 hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2334, ]$log10.1.pval.
 hgdp_s1.snp.res[hgdp_s1.snp.res[,1] == 2335, ]$log10.1.pval.
 ```
-```QUESTION: which XtXst values are significant?```
+```diff
+- QUESTION: which XtXst values are significant?
+```
 
 7. Correct by False Discovery Rate (FDR) by transforming the *P*-values into *q*-values (**R in your laptop**).
 
@@ -368,7 +381,6 @@ cd my_results
   
 8.3. Sanity Check (**R in your laptop**).
 
-
 Here, we are comparing the simulated data (PODS) under the inference model to the observed data to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
 
@@ -423,9 +435,13 @@ plot(pod.pi.beta.coef_100000, pi.beta.coef, xlab="pi.beta from PODs",
 	abline(a=0,b=1)
 dev.off()
 ```
-```QUESTION: Are the Omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?```
+```diff
+- QUESTION: Are the Omega matrix distances between the observed data and those from the 1,000 and 100,000 PODs similar?
+```
 
-```QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?```
+```diff
+- QUESTION: Look where the dots are falling in both sets of similations. What is the main difference when comparing the two simulation experiments (1,000 and 100,000 PODs) to the observed data?
+```
     
 ## The STANDARD Model (STDis): importance sampling 
 This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
@@ -555,7 +571,10 @@ xlab="SNP",ylab=expression(beta~"coefficient"))
 	mtext("STDis MODEL: European origin",side=3,line=- 2,outer=TRUE)
 dev.off()
 ```
-```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?```
+
+```diff
+- QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?
+```
 
 4. Calibrate the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
 
@@ -658,7 +677,7 @@ plot(pod.pi.beta.coef_10000, pi.beta.coef, xlab="pi.beta from PODs",
 dev.off()
 ```
 
-	4.5. Calibrate the BF, the eBPis and the correlation coefficients parameters.
+4.5. Calibrate the BF, the eBPis and the correlation coefficients parameters.
 
 ```R
 #Read the output file with the BF, eBPis and Beta correlation coefficients calculated from pods
@@ -767,7 +786,11 @@ plot(hgdp_stdis.snp.res[hgdp_stdis.snp.res[,1]==3,]$Beta_is,
 	mtext("STDis Model: European Origin",side=3,line=- 1.5,outer=TRUE)
 dev.off()
 ```
-```QUESTION: How many significant SNPs are correlating with any of the covariates? based on what criteria, BF or eBPis? Are all of them correlating in the same way?```
+
+```diff
+- QUESTION: How many significant SNPs are correlating with any of the covariates? based on what criteria, BF or eBPis? Are all of them correlating in the same way?
+
+```
 
 # EXTRA EXERCISES
 
@@ -780,7 +803,7 @@ This "combined" analysis allows to evaluate to which extent the population binar
 
 To run this analysis (with allele data) you will need:
 * The number of populations in the analysis (```-npop```)
-* * The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The genotype file (hgdp.geno in the input folder): the genotypes for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "articially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
 * The binary covariates file (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * The binary covariates file (covariates in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
 * To specify if you want to scale covariables (```-scalecov```)
@@ -832,11 +855,14 @@ hist(10**(-1*covariates_eu.C2$log10.1.pval.),freq=F,breaks=50,
 	abline(h=1)
 dev.off()
 ```
-```QUESTION: Are the C2 *P*-values behaving well?```
+
+```diff
+- QUESTION: Are the C2 *P*-values behaving well?
+```
 
 4. Calibrate C2 statistics.
 
-	4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
+4.1.Simulate 10,000 neutral PODs by submit the job script "run_10000_c2_simulations.sh" with the command sbatch. 
 
 ```bash
 module load r-mvtnorm
@@ -868,7 +894,7 @@ simu.C2.10000 <- simulate.baypass(omega.mat=omega_contrast,nsnp=10000,
 
 ```
 
-	4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
+4.2. Run the STDis and contrast Models with the 10,000 PODs as input by submit the job script "run_stdis_contrast_10000_simulations.sh" with the command sbatch.  
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -893,14 +919,14 @@ module load BayPass
 g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
 ```
 
-	4.3. Copy the previously obtained results to the my_results folder in your laptop.
+4.3. Copy the previously obtained results to the my_results folder in your laptop.
 
 ```bash
 scp scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*_contrast_10000* *C2_10000* ./my_results
 cd my_results
 ```
 
-	4.4. Sanity Check.
+4.4. Sanity Check.
 
 ```R
 #Get estimate of omega from the PODs
@@ -916,7 +942,7 @@ plot(pod.c2.pi.beta.coef,c2.pi.beta.coef)
     abline(a=0,b=1)
 ```
 
-	4.5. C2 and BF calibration.
+4.5. C2 and BF calibration.
 
 ```R
 #Read the files with the simulated C2 and BF
@@ -939,7 +965,7 @@ plot(covariates_eu.bf,covariates_eu.C2$M_C2,
 dev.off()
 ```
 
-	4.6. Plot the observed C2 and BF calibration for a matter of comparison.
+4.6. Plot the observed C2 and BF calibration for a matter of comparison.
 
 ```R
 #Read the obtained results
@@ -958,7 +984,10 @@ plot(covariates_eu.bf,covariates_eu.C2$log10.1.pval.,
 		y=covariates_eu.C2[covariates_eu.C2[ ,2 ]==2335, ]$log10.1.pval., col="red", pch=20)
 dev.off()
 ```
-```QUESTION: How many SNPs are significant before and after calibrating the C2 statistic using PODs? and how many after calibrating the BF?```
+
+```diff
+- QUESTION: How many SNPs are significant before and after calibrating the C2 statistic using PODs? and how many after calibrating the BF?
+```
 
 ### BIBLIOGRAPHY
 
