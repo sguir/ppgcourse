@@ -111,7 +111,7 @@ g_baypass -npop 52 -gfile hgdp.geno -nthreads 8 -seed 15263 -outprefix hgdp_core
 > * It takes ~ 6 mins each one
 > * This will generate 7 files for each seed.
 
-2. Download the obtained results in **my_folder in your laptop**.
+2. **Download** the obtained results in **my_folder in your laptop**.
 
 ```bash
 #Go to my_results folder
@@ -120,7 +120,7 @@ cd my_results
 #Copy the CORE Model results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_core_s* .
 ```
-3. Sanity Check. 
+3. **Sanity Check**. 
 3.1. **In the R session** that you opened before, compare the omega matrices obtained under the CORE model when using different seeds to check consistency in the estimation of parameters of the model.
 
 ```R
@@ -154,7 +154,7 @@ dist.23
 
 > * If there omegas are not significantly different we can assume that there is consistency in the parameters estimation and hence, you should choose one of the omegas to perform the subsequent analyses (omega 1).
 
-4. Visualization of the shared history of populations (**R in your laptop**).
+4. **Visualization** of the shared history of populations (**R in your laptop**).
 
 4.1. Explore the **shared history of populations** by transforming the omega covariance matrix into a **correlation matrix** using the R function cov2cor().
 
@@ -374,7 +374,7 @@ g_baypass -npop 52 -gfile G.hgdp_pods_1000 -nthreads 8 -outprefix hgdp_pod_1000
 
 :warning: For the second set of simulations, we are going to **use the precomputed files** resulting from running the CORE model with the 100000 simulations as input.
 
-8.3. Copy the previously obtained results and also those precomputed for 100,000 PODs to the **my_results folder in your laptop**:
+8.3. **Copy** the previously obtained results and also those precomputed for 100,000 PODs to the **my_results folder in your laptop**:
 
 ```bash
 cd my_results
@@ -387,7 +387,7 @@ scp ../results/CORE_Model/simulations/100000/*_100000* .
 cd my_results
 ```
   
-8.3. Sanity Check (**R in your laptop**).
+8.3. **Sanity Check** (**R in your laptop**).
 
 Here, we are **comparing the simulated data (PODS)** under the inference model **to the observed data** to assess if the inference model (posterior distributions for the covariance matrix and the other hyperparameters) is giving us \"valid\" predictions about the \"reality\".
 In other words, if the model we have inferred is able to generate data similar to those observed and in case of yes, how many simulations are needed.
@@ -451,7 +451,7 @@ dev.off()
 ```
     
 ## The STANDARD Model (STDis): importance sampling 
-This model allows to evaluate to which extent the population covariables are (linearly) associated to each marker/SNP.
+This model allows to evaluate to which extent the **population covariables are (linearly) associated to each marker/SNP**.
 The estimation of the beta regression coefficients for each SNP and covariable is performed using the importance sampling approach.
 
 * Remember that this model is **recommended when the number of populations is small (e.g.,  8**) and/or **when populations are highly differentiated**.
@@ -506,7 +506,7 @@ g_baypass -npop 52 -gfile hgdp.geno -efile covariates -scalecov -nthreads 8 -out
 cd my_results
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/hgdp_stdis_* .
 ```
-3. Inspect the **obtained results** (**R in your laptop**).
+3. **Inspect** the obtained **results** (**R in your laptop**).
 
 ```R
 #Read the file with the BF, the eBPis and the correlation coefficients parameters
@@ -582,7 +582,7 @@ dev.off()
 - QUESTION: How many significant SNPs are correlating with any of the covariates? based on what creiteria, BF or eBPis? Are all of them correlating in the same way?
 ```
 
-4. **Calibrate the STDis Parameters** (BF, the eBPis and the correlation coefficients) using PODs.
+4. **Calibrate** the STDis Parameters (BF, the eBPis and the correlation coefficients) using PODs.
 
 4.1. **Simulate 10,000 PODs** by submit the job script "run_10000_simulations.sh" **in the cluster**.
 
@@ -660,7 +660,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 ```
 :no_entry:
 
-4.3. Copy the precomputed results to the **my_results folder in your laptop**:
+4.3. **Copy** the precomputed results to the **my_results folder in your laptop**:
 
 ```bash
 #In your laptop
@@ -668,7 +668,7 @@ cd my_results
 scp ../results/STDis_Model/simulations/*_10000* .
 ```
 
-4.4. Sanity check (**R in your laptop**).
+4.4. **Sanity check** (**R in your laptop**).
 
 ```R
 #Read the files resulting from running he CORE Model and from simulating PODs
@@ -970,7 +970,7 @@ scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_d
 scp user@ec2-52-16-103-220.eu-west-1.compute.amazonaws.com:/home/user/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO/input/*C2_10000* .
 ```
 
-4.4. Sanity Check (**R in your laptop**).
+4.4. **Sanity Check** (**R in your laptop**).
 
 ```R
 #Read the omega matrix from observed data:
@@ -993,7 +993,7 @@ plot(pod.c2.pi.beta.coef,c2.pi.beta.coef)
     abline(a=0,b=1)
 ```
 
-4.5. C2 and BF **calibration** (**R in your laptop**).
+4.5. **Calibrat** the C2 and BF (**R in your laptop**).
 
 ```R
 #Read the obtained results
@@ -1020,7 +1020,7 @@ plot(covariates_eu.bf,covariates_eu.C2$M_C2,
 dev.off()
 ```
 
-4.6. Plot the observed C2 and BF calibration for a matter of comparison (**R in your laptop**).
+4.6. **Plot** the observed C2 and BF for a matter of comparison (**R in your laptop**).
 
 ```R
 #Read the obtained results
