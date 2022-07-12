@@ -79,7 +79,8 @@ sbatch  run_core_model_seed1.sh
 sbatch  run_core_model_seed2.sh
 sbatch  run_core_model_seed3.sh
 ```
-> * This is the code for run_core_model_seed1.sh:
+> * This is the code to run the "run_core_model_seed1.sh" script:
+
 ```
 #!/bin/bash                                                                                                             
 
@@ -325,7 +326,7 @@ q()
 #In the scripts	subfolder
 sbatch run_core_1000_simulations.sh 
 ```
-> * this is the code for the run_core_1000_simulations.sh script
+> * This is the code for the "run_core_1000_simulations.sh" script
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -340,7 +341,7 @@ sbatch run_core_1000_simulations.sh
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 # module load                                                                                                           
@@ -446,7 +447,9 @@ To run this model (with allele data) you will need:
 
 ```bash
 #In the scripts subfolder
-
+sbatch run_stdis_model.sh
+```
+> * This is the code for the "run_stdis_model.sh" script
 
 ```bash
 #!/bin/bash                                                                                                             
@@ -461,7 +464,7 @@ To run this model (with allele data) you will need:
 #SBATCH --cpus-per-task=8 
 
 # directories
-INPUT=./input/hgdp.geno
+INPUT=../input
 cd $INPUT
 
 # module load                                                                                                           
