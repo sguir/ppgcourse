@@ -20,7 +20,7 @@ We are going to work with **three different consoles/terminals**:
 * To download and copy some precomputed results ("results" folder) to a new created folder "my_folder". 
 
 ## Get data
-1. retrieve the **input data** and the **scripts** for this session:  
+1. Retrieve the **input data** and the **scripts** for this session:  
  
 ```bash
 svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO
