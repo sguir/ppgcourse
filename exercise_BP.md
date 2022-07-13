@@ -12,8 +12,10 @@ These **two SNPs** have been previously reported to be **under positive selectio
 ## Working space
 We are going to work with **three different consoles/terminals**:
 
-* To run BayPass Models (sbatch command) and to perform simulations (R) in the cluster.
+* To run BayPass Models (sbatch command) and to perform simulations (R) in the cluster.  
+	> :warning: Run the scripts always from the scripts folder
 * To compute some statistics (R) and plot the obtained results (R) in your laptop ("my_folder").
+*	> :warning: Open the R session and set "my_folder" as the working directory. Run the R commands without closing the R session. 
 * To download and copy some precomputed results ("results" folder) to a new created folder "my_folder" in your laptop. 
 
 ## Get data
