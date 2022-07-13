@@ -3,7 +3,7 @@
 
 In this practical class we will try to identify human **SNPs with evidences of local adaptive diversification** and/or **significantly associated to geographical variables** while taking into account the null correlation of allele frequencies across populations.
 
-* We will use a modified version of the data used in Coop et al. (2010). It consists of **Pool-seq data** corresponding to **2335 SNPs** (2333 + 2) for **927 individuals** from **52 human populations** of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
+* We will use a modified version of the data used in Coop et al. (2010). It consists of **genotypes** corresponding to **2335 SNPs** (2333 + 2) for **927 individuals** from **52 human populations** of the Human Genome Diversity Project (HGDP) panel (Conrad et al. 2006). The last two SNPs (rs12913832 and rs1042602) were added manually. 
 These **two SNPs** have been previously reported to be **under positive selection in European populations** and are located in genes (ERC2 and TYR) involved in **light skin and eye color** (Wilde et al.2014).
 * The covariates (geographical variables) explored are **latitude**, **longitude** and a categorical variable with value = 1 if the population is **European** and -1 if is not.
  
@@ -67,7 +67,7 @@ The main advantage of this approach is that explicitly **accounts for the covari
 
 To run this model (using read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads for the reference variant and the other for the number of reads for the alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of the reference and the other for the alternative allele counts (```-gfile```). 
 * A random number for the **seed** (in case of needed; ```-seed```)
 * A **prefix to name the output** (```-outprefix```)
 
@@ -459,7 +459,7 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 
 To run this model (with read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
 * The **covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * To specify if you want to **scale** covariables (```-scalecov```)
 * **A prefix to name the output** (```-outprefix```)
@@ -818,7 +818,7 @@ This **"combined" analysis** allows to evaluate to which extent the **population
 
 To run this analysis (with read count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
-* The **genotype file** (hgdp.geno): the genotypes (number of reads) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of reads of the reference variant and the other for the the number of reads alternative variant (```-gfile```). 
+* The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
 * The **binary covariates file** (covariates_eu in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
 * The **binary covariates file** (covariates_eu in the input folder): In rows, the binary covariates. In columns, the group membership of each population, 1 for first group, -1 for the alternative group, and possibly 0 if excluded from the contrast computation (```-contrastfile```).
 * To specify if you want to **scale covariables** (```-scalecov```)
@@ -853,7 +853,7 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (STDis and Contrast Model)
-g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast
+g_baypass -npop 52 -gfile hgdp.geno -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -outprefix hgdp_contrast
 ````
 > * It generates 9 output files.
 > * It takes about 6 mins.
@@ -952,7 +952,7 @@ cd $INPUT
 module load BayPass   
 
 # run BayPass (CORE Model) with the 10000 c2 PODs as input
-g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -d0yij 20 -outprefix hgdp_contrast_10000_pods 
+g_baypass -npop 52 -gfile G.hgdp_C2_10000_pods -contrastfile covariates_eu -efile covariates_eu -nthreads 8 -outprefix hgdp_contrast_10000_pods 
 ```
 
 > * It generates 9 output files
