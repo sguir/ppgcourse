@@ -324,7 +324,7 @@ source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 #Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-#Upload the original data to obtain total read count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
+#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
 
 #Read the omega matrix from seed1 obtained from running the CORE Model:
@@ -603,7 +603,7 @@ source("/opt/ohpc/pub/apps/BayPass/2.3/utils/baypass_utils.R")
 #Get estimates (posterior mean) of both the a_pi and b_pi parameters of the Pi Beta distribution obtained when running the CORE Model
 pi.beta.coef=read.table("hgdp_core_s1_summary_beta_params.out",h=T)$Mean
 
-#Upload the original data to obtain total read count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
+#Upload the original data to obtain total allele count (sample size for each population). Do this by using the geno2YN() function in baypass_utils.R script
 hgdp.data<-geno2YN("hgdp.geno")
 
 #Read the omega matrix from seed1 obtained when running the CORE Model:
