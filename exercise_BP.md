@@ -22,7 +22,7 @@ We are going to work with **three different consoles/terminals**:
 1. Retrieve the **input data** and the **scripts** for this session:  
  
 ```bash
-svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiaion_and_covariates_association.SARA_GUIRAO-RICO
+svn export https://github.com/ppgcourseUB/ppgcourse2022/trunk/Adaptive_differentiation_and_covariates_association.SARA_GUIRAO-RICO
 ```
 
 * The folder has two main subfolders:
