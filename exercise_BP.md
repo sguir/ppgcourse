@@ -65,7 +65,7 @@ Now you are ready to run BayPass.
 The core model allows to perform **genome scans for differentiation** (covariate free) using the **XtX statistics** (\~Fst).
 The main advantage of this approach is that explicitly **accounts for the covariance structure in population allele frequencies** (via estimating) resulting from the demographic history of the populations.
 
-To run this model (using read count data) you will need:
+To run this model (using allele count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
 * The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the number of the reference and the other for the alternative allele counts (```-gfile```). 
 * A random number for the **seed** (in case of needed; ```-seed```)
@@ -457,7 +457,7 @@ The estimation of the beta regression coefficients for each SNP and covariable i
 * Bayes factor importance sampling (BFis) and the approximated Bayesian *P*-value (eBPis) are used to evaluate if a particular SNP is associated with a particular covariable and, as the XtX statistic in the CORE Model, they should be calibrated. 
 * Note that unlike the other models (AUX, AUX-LD, STDmcmc), this model calculates the covariance matrix (omega) and the correlation parameter (beta) at the same time.
 
-To run this model (with read count data) you will need:
+To run this model (using allele count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
 * The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
 * The **covariates file** (covariates in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
@@ -816,7 +816,7 @@ This **"combined" analysis** allows to evaluate to which extent the **population
 
 * Remember all the recomendations described above for running the STDis Model
 
-To run this analysis (with read count data) you will need:
+To run this analysis (using allele count data) you will need:
 * The **number of populations** in the analysis (```-npop```)
 * The **genotype file** (hgdp.geno): the genotypes (allele counts) for each SNP and population. In rows, the SNPs ordered according to their physical position on the chromosomes (if possible), except for the last two SNPs that where "artificially" introduced. In columns: populations. Each population has two columns: one for the reference and the other for the alternative allele counts (```-gfile```). 
 * The **binary covariates file** (covariates_eu in the input folder): In rows, the covariates. In columns, populations (one column per population). The order of the populations should be the same as in the genotype file (```-efile```).
